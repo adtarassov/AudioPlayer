@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/mainScreenFragment">
+
+  <fragment
+      android:id="@+id/mainScreenFragment"
+      android:name="com.adtarassov.audioplayer.ui.MainScreenFragment"
+      android:label="@string/main_fragment_toolbar_title"
+      tools:layout="@layout/main_screen_fragment">
+    <action
+        android:id="@+id/action_mainScreenFragment_to_audioListFragment2"
+        app:destination="@id/audioListFragment" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/audioListFragment"
+      android:name="com.adtarassov.audioplayer.ui.AudioListFragment"
+      android:label="Мои аудио"
+      tools:layout="@layout/fragment_audio_list">
+    <argument
+        android:name="list_type"
+        android:defaultValue="-1"
+        app:argType="integer" />
+  </fragment>
+
+</navigation>

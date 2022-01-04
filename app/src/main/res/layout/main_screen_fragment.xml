@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainScreenFragment"
+    >
+
+  <androidx.cardview.widget.CardView
+      android:id="@+id/all_audio_button"
+      android:layout_width="128dp"
+      android:layout_height="128dp"
+      android:padding="4dp"
+      app:cardCornerRadius="8dp"
+      app:cardElevation="10dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/favorite_audio_button"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+    <TextView
+        android:layout_width="125dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Все аудио"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        />
+
+  </androidx.cardview.widget.CardView>
+
+  <androidx.cardview.widget.CardView
+      android:id="@+id/favorite_audio_button"
+      android:layout_width="128dp"
+      android:layout_height="128dp"
+      android:padding="4dp"
+      app:cardCornerRadius="8dp"
+      app:cardElevation="10dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/all_audio_button"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Мои аудио"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        />
+
+  </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
