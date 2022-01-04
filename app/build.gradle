@@ -54,11 +54,11 @@ dependencies {
 
   implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
   implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+  implementation "androidx.navigation:navigation-dynamic-features-fragment:$navVersion"
 
   // Dagger Hilt
   implementation "com.google.dagger:hilt-android:$hiltVersion"
   kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-  implementation "androidx.hilt:hilt-navigation-fragment:1.0.0"
 
   implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }

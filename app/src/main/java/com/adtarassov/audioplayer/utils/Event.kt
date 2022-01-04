@@ -17,8 +17,8 @@ data class Event<out T>(val status: Status, val data: T?, val message: String?) 
       return Event(Status.ERROR, data, message)
     }
 
-    fun <T> loading(data: T? = null): Event<T> {
-      return Event(Status.LOADING, data, null)
+    fun <T> loading(): Event<T> {
+      return Event(Status.LOADING, null, null)
     }
   }
 }
