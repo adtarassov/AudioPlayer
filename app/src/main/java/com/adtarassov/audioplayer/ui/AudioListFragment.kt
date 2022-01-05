@@ -5,9 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.adtarassov.audioplayer.R
 import com.adtarassov.audioplayer.databinding.FragmentAudioListBinding
 import com.adtarassov.audioplayer.utils.AudioListType
 import com.adtarassov.audioplayer.utils.Event.Status.ERROR
@@ -38,6 +43,12 @@ class AudioListFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     adapter = AudioListAdapter(viewModel::onAudioClick)
     binding.audioListRecyclerView.adapter = adapter
+    AppCompatResources.getDrawable(view.context, R.drawable.divider_drawable)?.let {
+      val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
+      dividerItemDecoration.setDrawable(it)
+      binding.audioListRecyclerView.addItemDecoration(dividerItemDecoration)
+    }
+    viewModel.getAllAudio()
     binding.audioListRecyclerView.layoutManager = LinearLayoutManager(context)
     viewModel.audioList.observe(viewLifecycleOwner) { event ->
       when (event.status) {
