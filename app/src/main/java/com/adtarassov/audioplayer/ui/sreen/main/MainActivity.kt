@@ -1,4 +1,4 @@
-package com.adtarassov.audioplayer.ui
+package com.adtarassov.audioplayer.ui.sreen.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,10 +9,10 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.adtarassov.audioplayer.R.id
 import com.adtarassov.audioplayer.databinding.ActivityMainBinding
+import com.adtarassov.audioplayer.utils.player.AudioManager
 import com.adtarassov.audioplayer.utils.AudioListType
-import com.adtarassov.audioplayer.utils.AudioListType.All
-import com.adtarassov.audioplayer.utils.AudioListType.FAVORITE
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

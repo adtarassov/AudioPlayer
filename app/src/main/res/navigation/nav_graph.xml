@@ -7,7 +7,7 @@
 
   <fragment
       android:id="@+id/mainScreenFragment"
-      android:name="com.adtarassov.audioplayer.ui.MainScreenFragment"
+      android:name="com.adtarassov.audioplayer.ui.sreen.main.MainScreenFragment"
       android:label="@string/main_fragment_toolbar_title"
       tools:layout="@layout/main_screen_fragment">
     <action
@@ -17,7 +17,7 @@
 
   <fragment
       android:id="@+id/audioListFragment"
-      android:name="com.adtarassov.audioplayer.ui.AudioListFragment"
+      android:name="com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListFragment"
       android:label="Мои аудио"
       tools:layout="@layout/fragment_audio_list">
     <argument

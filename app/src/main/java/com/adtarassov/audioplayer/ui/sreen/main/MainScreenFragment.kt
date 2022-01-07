@@ -1,4 +1,4 @@
-package com.adtarassov.audioplayer.ui
+package com.adtarassov.audioplayer.ui.sreen.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

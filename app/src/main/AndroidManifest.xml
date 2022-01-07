@@ -15,9 +15,9 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/Theme.AudioPlayer">
-    <service android:name=".player.AudioPlayerService" />
+    <service android:name="com.adtarassov.audioplayer.utils.player.AudioService" />
     <activity
-        android:name=".ui.MainActivity"
+        android:name=".ui.sreen.main.MainActivity"
         android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

@@ -1,14 +1,15 @@
-package com.adtarassov.audioplayer.ui
+package com.adtarassov.audioplayer.ui.sreen.audiolist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adtarassov.audioplayer.data.AudioModel
 import com.adtarassov.audioplayer.databinding.AudioItemBinding
+import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAdapter.AudioViewHolder
 
 class AudioListAdapter(
   private val onAudioClickListener: (AudioModel) -> Unit
-) : RecyclerView.Adapter<AudioListAdapter.AudioViewHolder>() {
+) : RecyclerView.Adapter<AudioViewHolder>() {
 
   private var audioList = ArrayList<AudioModel>()
 
