@@ -37,12 +37,12 @@ class AudioListFragment : Fragment() {
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
     audioListType = AudioListType.typeById(args.listType)
+    adapter = AudioListAdapter(viewModel::onAudioClick)
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    adapter = AudioListAdapter(viewModel::onAudioClick)
     binding.audioListRecyclerView.adapter = adapter
     AppCompatResources.getDrawable(view.context, R.drawable.divider_drawable)?.let {
       val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
