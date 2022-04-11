@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.sreen.audiolist.AudioListFragment"
+    tools:context=".ProfileFragment"
     >
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/audio_list_recycler_view"
+  <!-- TODO: Update blank fragment layout -->
+  <TextView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      tools:itemCount="4"
-      tools:listitem="@layout/item_audio_list"
+      android:text="@string/hello_blank_fragment"
       />
 
 </FrameLayout>

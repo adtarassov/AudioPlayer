@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/mainScreenFragment">
+    app:startDestination="@id/home_fragment">
 
   <fragment
-      android:id="@+id/mainScreenFragment"
-      android:name="com.adtarassov.audioplayer.ui.sreen.main.MainScreenFragment"
+      android:id="@+id/home_fragment"
+      android:name="com.adtarassov.audioplayer.ui.sreen.main.HomeFragment"
       android:label="@string/main_fragment_toolbar_title"
-      tools:layout="@layout/main_screen_fragment">
+      tools:layout="@layout/fragment_home">
     <action
-        android:id="@+id/action_mainScreenFragment_to_audioListFragment2"
-        app:destination="@id/audioListFragment" />
+        android:id="@+id/action_home_fragment_to_audio_list_fragment"
+        app:destination="@id/audio_list_fragment" />
   </fragment>
 
   <fragment
-      android:id="@+id/audioListFragment"
+      android:id="@+id/audio_list_fragment"
       android:name="com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListFragment"
       android:label="Мои аудио"
       tools:layout="@layout/fragment_audio_list">
@@ -25,5 +25,11 @@
         android:defaultValue="-1"
         app:argType="integer" />
   </fragment>
+
+  <fragment
+      android:id="@+id/profile_fragment"
+      android:name="com.adtarassov.audioplayer.ProfileFragment"
+      android:label="fragment_profile"
+      tools:layout="@layout/fragment_profile" />
 
 </navigation>

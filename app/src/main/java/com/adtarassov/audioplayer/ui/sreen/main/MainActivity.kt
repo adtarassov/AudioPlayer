@@ -7,23 +7,24 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.adtarassov.audioplayer.R.id
 import com.adtarassov.audioplayer.databinding.ActivityMainBinding
-import com.adtarassov.audioplayer.utils.player.AudioManager
 import com.adtarassov.audioplayer.utils.AudioListType
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
+  //todo add viewModel
   private lateinit var binding: ActivityMainBinding
   private lateinit var appBarConfiguration: AppBarConfiguration
   private lateinit var navController: NavController
+  private lateinit var bottomNavigationView: BottomNavigationView
 
   private val onFragmentChangedListener = NavController.OnDestinationChangedListener {
       _, _, arguments ->
-    val args= arguments ?: return@OnDestinationChangedListener
+    val args = arguments ?: return@OnDestinationChangedListener
     val listType = AudioListType.typeById(args[AudioListType.BUNDLE_KEY] as Int)
     binding.toolbar.subtitle = AudioListType.getToolbarSubtitleByType(listType)
   }
@@ -33,10 +34,14 @@ class MainActivity : AppCompatActivity() {
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
     setSupportActionBar(binding.toolbar)
+
     val navHostFragment = supportFragmentManager.findFragmentById(id.nav_host_fragment) as NavHostFragment
+    appBarConfiguration = AppBarConfiguration(setOf(id.home_fragment, id.profile_fragment))
+    bottomNavigationView = binding.bottomNavigationView
     navController = navHostFragment.navController
-    appBarConfiguration = AppBarConfiguration(setOf(id.mainScreenFragment))
     navController.addOnDestinationChangedListener(onFragmentChangedListener)
+
+    bottomNavigationView.setupWithNavController(navController)
     setupActionBarWithNavController(navController, appBarConfiguration)
   }
 
@@ -46,7 +51,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   override fun onSupportNavigateUp(): Boolean {
-    binding.toolbar.subtitle = ""
+    binding.toolbar.subtitle = "" //fixme delete this
     return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp()
   }
 }

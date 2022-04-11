@@ -6,21 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.adtarassov.audioplayer.databinding.MainScreenFragmentBinding
+import com.adtarassov.audioplayer.databinding.FragmentHomeBinding
 import com.adtarassov.audioplayer.utils.AudioListType
 import com.adtarassov.audioplayer.utils.AudioListType.All
 import com.adtarassov.audioplayer.utils.AudioListType.FAVORITE
 
-class MainScreenFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-  private var _binding: MainScreenFragmentBinding? = null
+  //todo add viewModel
+  private var _binding: FragmentHomeBinding? = null
   private val binding get() = _binding!!
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    _binding = MainScreenFragmentBinding.inflate(inflater, container, false)
+    _binding = FragmentHomeBinding.inflate(inflater, container, false)
     return binding.root
   }
 
@@ -35,7 +36,7 @@ class MainScreenFragment : Fragment() {
   }
 
   private fun navigateToAudioList(listType: AudioListType) {
-    val action = MainScreenFragmentDirections.actionMainScreenFragmentToAudioListFragment2(
+    val action = HomeFragmentDirections.actionHomeFragmentToAudioListFragment(
       listType = AudioListType.idByType(listType)
     )
     findNavController().navigate(action)
