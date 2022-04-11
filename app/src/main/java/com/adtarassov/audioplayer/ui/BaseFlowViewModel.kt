@@ -15,7 +15,6 @@ abstract class BaseFlowViewModel<S, A, E>: ViewModel() {
     set(value) {
       if (_viewStates.value == value) {
         _viewStates.value = null
-        throw IllegalStateException("StateFlow doesn't work with same values")
       }
       _viewStates.value = value
     }
@@ -30,7 +29,6 @@ abstract class BaseFlowViewModel<S, A, E>: ViewModel() {
       /** StateFlow doesn't work with same values */
       if (_viewActions.value == value) {
         _viewActions.value = null
-        throw IllegalStateException("StateFlow doesn't work with same values")
       }
       _viewActions.value = value
     }

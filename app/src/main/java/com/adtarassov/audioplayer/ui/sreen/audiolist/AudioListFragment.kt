@@ -20,6 +20,7 @@ import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.Loading
 import com.adtarassov.audioplayer.utils.AudioListType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 
 @AndroidEntryPoint
 class AudioListFragment : Fragment() {
@@ -37,7 +38,9 @@ class AudioListFragment : Fragment() {
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
     audioListType = AudioListType.typeById(args.listType)
-    adapter = AudioListAdapter(viewModel::onAudioClick)
+    adapter = AudioListAdapter {
+      viewModel.obtainEvent(AudioListEvent.OnAudioClick(it))
+    }
     return binding.root
   }
 
@@ -49,12 +52,12 @@ class AudioListFragment : Fragment() {
       dividerItemDecoration.setDrawable(it)
       binding.audioListRecyclerView.addItemDecoration(dividerItemDecoration)
     }
-    viewModel.getAllAudio()
     binding.audioListRecyclerView.layoutManager = LinearLayoutManager(context)
     lifecycleScope.launchWhenCreated {
-      viewModel.viewStates().collect { state -> state?.let { bindViewState(it) } }
-      viewModel.viewActions().collect { action -> action?.let { bindViewAction(it) } }
+      viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
+      viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
+    viewModel.obtainEvent(AudioListEvent.ViewCreated)
   }
 
   private fun bindViewState(state: AudioListViewState) {

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adtarassov.audioplayer.data.AudioModel
-import com.adtarassov.audioplayer.databinding.AudioItemBinding
+import com.adtarassov.audioplayer.databinding.AudioListItemBinding
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAdapter.AudioViewHolder
 
 class AudioListAdapter(
@@ -14,7 +14,7 @@ class AudioListAdapter(
   private var audioList = ArrayList<AudioModel>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AudioViewHolder {
-    val binding = AudioItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    val binding = AudioListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     return AudioViewHolder(binding, onAudioClickListener)
   }
 
@@ -31,7 +31,7 @@ class AudioListAdapter(
   }
 
   class AudioViewHolder(
-    private val binding: AudioItemBinding,
+    private val binding: AudioListItemBinding,
     private val onAudioClickListener: (AudioModel) -> Unit
   ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(model: AudioModel) {

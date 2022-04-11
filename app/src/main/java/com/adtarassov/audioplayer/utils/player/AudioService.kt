@@ -3,25 +3,29 @@ package com.adtarassov.audioplayer.utils.player
 import android.app.Notification
 import android.app.Service
 import android.content.Intent
-import android.media.AudioAttributes.CONTENT_TYPE_MUSIC
-import android.media.AudioAttributes.USAGE_MEDIA
 import android.media.MediaDescription
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
 import com.adtarassov.audioplayer.R
+import com.google.android.exoplayer2.C.CONTENT_TYPE_MUSIC
+import com.google.android.exoplayer2.C.USAGE_MEDIA
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class AudioService : Service() {
 
   private val binder = AudioBinder()
-  private var mediaPlayer: MediaPlayer? = null
+  private var mediaPlayer: ExoPlayer? = null
 
 //  private val controlDispatcher: ControlDispatcher = DefaultControlDispatcher()
   private var notificationManager: PlayerNotificationManager? = null
@@ -42,7 +46,7 @@ class AudioService : Service() {
 
   override fun onCreate() {
     super.onCreate()
-    createPlayer()
+    initialisePlayer()
   }
 
   override fun onDestroy() {
@@ -54,29 +58,29 @@ class AudioService : Service() {
   private fun createPlayer(): ExoPlayer {
     val player = ExoPlayer.Builder(baseContext, DefaultRenderersFactory(baseContext)).build()
     val audioAttributes = AudioAttributes.Builder().run {
-//      setUsage(USAGE_MEDIA)
-//      setContentType(CONTENT_TYPE_MUSIC)
+      setUsage(USAGE_MEDIA)
+      setContentType(CONTENT_TYPE_MUSIC)
       build()
     }
     player.setAudioAttributes(audioAttributes, true)
     return player
   }
 
-//  private fun initialisePlayer() {
-//    if (this.player == null) {
-//      this.player = createPlayer()
+  private fun initialisePlayer() {
+//    if (mediaPlayer == null) {
+//      mediaPlayer = createPlayer()
 //    }
 //    try {
-//      this.podcastData?.takeIf { it.url.isValidUrl() }?.let {
-//        this.player?.clearMediaItems()
-//        this.player?.addMediaItem(MediaItem.fromUri(Uri.parse(it.url)))
-//        this.player?.prepare()
-//        this.player?.play()
-//      }
+//      val url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+//      mediaPlayer?.clearMediaItems()
+//      mediaPlayer?.addMediaItem(MediaItem.fromUri(Uri.parse(url)))
+//      mediaPlayer?.prepare()
+//      mediaPlayer?.play()
+//      mediaPlayer?.playbackParameters = PlaybackParameters(1f, 1f)
 //    } catch (e: Exception) {
 //      e.printStackTrace()
 //    }
-//  }
+  }
 //
 //  private fun initialiseNotification() {
 //    this.mediaSession = MediaSessionCompat(this, MEDIA_SESSION_TAG).apply {

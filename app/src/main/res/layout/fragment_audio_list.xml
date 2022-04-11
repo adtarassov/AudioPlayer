@@ -11,9 +11,8 @@
       android:id="@+id/audio_list_recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginHorizontal="16dp"
-      tools:itemCount="2"
-      tools:listitem="@layout/audio_item"
+      tools:itemCount="4"
+      tools:listitem="@layout/audio_list_item"
       />
 
 </FrameLayout>
