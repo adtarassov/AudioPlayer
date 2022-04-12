@@ -27,8 +27,12 @@ class AudioListFragment : Fragment() {
 
   private val viewModel: AudioListViewModel by viewModels()
   private val args:  AudioListFragmentArgs by navArgs()
+  private val adapter = AudioListAdapter {
+    viewModel.obtainEvent(AudioListEvent.OnAudioClick(it))
+  }
+
   private lateinit var audioListType: AudioListType
-  private lateinit var adapter: AudioListAdapter
+
   private var _binding: FragmentAudioListBinding? = null
   private val binding get() = _binding!!
 
@@ -38,21 +42,18 @@ class AudioListFragment : Fragment() {
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
     audioListType = AudioListType.typeById(args.listType)
-    adapter = AudioListAdapter {
-      viewModel.obtainEvent(AudioListEvent.OnAudioClick(it))
-    }
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.audioListRecyclerView.adapter = adapter
+    binding.audioListRecyclerView.layoutManager = LinearLayoutManager(context)
     AppCompatResources.getDrawable(view.context, R.drawable.divider_drawable)?.let {
       val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
       dividerItemDecoration.setDrawable(it)
       binding.audioListRecyclerView.addItemDecoration(dividerItemDecoration)
     }
-    binding.audioListRecyclerView.layoutManager = LinearLayoutManager(context)
     lifecycleScope.launchWhenCreated {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }

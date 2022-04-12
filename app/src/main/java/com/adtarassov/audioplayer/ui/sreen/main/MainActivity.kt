@@ -3,6 +3,7 @@ package com.adtarassov.audioplayer.ui.sreen.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.forEach
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -12,7 +13,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.adtarassov.audioplayer.R.id
 import com.adtarassov.audioplayer.databinding.ActivityMainBinding
-import com.adtarassov.audioplayer.utils.AudioListType
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -21,35 +21,42 @@ import kotlinx.coroutines.flow.filterNotNull
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-  private val viewModel: MainActivityModel by viewModels()
+  private val viewModel: MainActivityViewModel by viewModels()
+  private val appBarConfiguration = AppBarConfiguration(setOf(id.home_fragment, id.profile_fragment))
 
   private lateinit var binding: ActivityMainBinding
-  private lateinit var appBarConfiguration: AppBarConfiguration
   private lateinit var navController: NavController
-  private lateinit var bottomNavigationView: BottomNavigationView
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
     setSupportActionBar(binding.toolbar)
-
-    val navHostFragment = supportFragmentManager.findFragmentById(id.nav_host_fragment) as NavHostFragment
-    appBarConfiguration = AppBarConfiguration(setOf(id.home_fragment, id.profile_fragment))
-    bottomNavigationView = binding.bottomNavigationView
-    navController = navHostFragment.navController
-    navController.addOnDestinationChangedListener(viewModel.onFragmentChangedListener)
-
-    bottomNavigationView.setupWithNavController(navController)
-    setupActionBarWithNavController(navController, appBarConfiguration)
-
+    setupNavigation()
     lifecycleScope.launchWhenCreated {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
   }
 
+  private fun setupNavigation() {
+    val navHostFragment = supportFragmentManager.findFragmentById(id.nav_host_fragment) as NavHostFragment
+    navController = navHostFragment.navController
+    navController.addOnDestinationChangedListener(viewModel.onFragmentChangedListener)
+    binding.bottomNavigationView.setupWithNavController(navController)
+    setupActionBarWithNavController(navController, appBarConfiguration)
+  }
+
   private fun bindViewAction(action: MainActivityAction) {
+    when (action) {
+      is MainActivityAction.OnNavigationChange -> {
+//        binding.bottomNavigationView.menu.forEach { item ->
+//          if (action.destination == item.itemId) {
+//            item.isChecked = true
+//          }
+//        }
+      }
+    }
   }
 
   private fun bindViewState(state: MainActivityViewState) {

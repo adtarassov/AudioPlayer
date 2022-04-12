@@ -28,7 +28,7 @@
 
   <fragment
       android:id="@+id/profile_fragment"
-      android:name="com.adtarassov.audioplayer.ProfileFragment"
+      android:name="com.adtarassov.audioplayer.ui.sreen.profile.ProfileFragment"
       android:label="fragment_profile"
       tools:layout="@layout/fragment_profile" />
 

@@ -27,7 +27,7 @@ class AudioListAdapter(
   fun refreshAudioList(list: List<AudioModel>) {
     audioList.clear()
     audioList.addAll(list)
-    notifyItemRangeInserted(0, list.size)
+    notifyItemChanged(0, list.size)
   }
 
   class AudioViewHolder(
