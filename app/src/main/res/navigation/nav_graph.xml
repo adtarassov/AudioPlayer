@@ -7,7 +7,7 @@
 
   <fragment
       android:id="@+id/home_fragment"
-      android:name="com.adtarassov.audioplayer.ui.sreen.main.HomeFragment"
+      android:name="com.adtarassov.audioplayer.ui.sreen.home.HomeFragment"
       android:label="@string/main_fragment_toolbar_title"
       tools:layout="@layout/fragment_home">
     <action
