@@ -41,6 +41,7 @@ dependencies {
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
   implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
   implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+  implementation 'androidx.lifecycle:lifecycle-service:2.4.1'
   def navVersion = "2.4.2"
   def hiltVersion = "2.40.5"
 

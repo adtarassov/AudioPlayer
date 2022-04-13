@@ -13,21 +13,23 @@ import javax.inject.Singleton
 
 @Singleton
 class AudioManager @Inject constructor(
-  @ApplicationContext private val context: Context
+  @ApplicationContext
+  private val context: Context
 ) {
   private val audioService: MutableLiveData<AudioService> = MutableLiveData()
   fun getAudioService(): LiveData<AudioService> = audioService
-  private var bound: Boolean = false
+
+  private var serviceConnected: Boolean = false
 
   private val connection = object : ServiceConnection {
     override fun onServiceConnected(className: ComponentName, service: IBinder) {
       val binder = service as AudioService.AudioBinder
       audioService.postValue(binder.getService())
-      bound = true
+      serviceConnected = true
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
-      bound = false
+      serviceConnected = false
     }
   }
 
