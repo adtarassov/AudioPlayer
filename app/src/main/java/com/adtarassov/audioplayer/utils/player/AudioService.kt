@@ -101,13 +101,14 @@ class AudioService : LifecycleService() {
     // Play
     intent?.let {
       val url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-      play(url)
+      //play(url)
     }
   }
 
   @MainThread
   fun play(url: String) {
     val player = audioPlayer ?: return
+    player.stop()
     player.clearMediaItems()
     val item = MediaItem.fromUri(Uri.parse(url))
     player.addMediaItem(item)

@@ -16,20 +16,17 @@ class AudioManager @Inject constructor(
   @ApplicationContext
   private val context: Context
 ) {
-  private val audioService: MutableLiveData<AudioService> = MutableLiveData()
-  fun getAudioService(): LiveData<AudioService> = audioService
-
-  private var serviceConnected: Boolean = false
+  private val audioService: MutableLiveData<AudioService?> = MutableLiveData(null)
+  fun getAudioService(): LiveData<AudioService?> = audioService
 
   private val connection = object : ServiceConnection {
     override fun onServiceConnected(className: ComponentName, service: IBinder) {
       val binder = service as AudioService.AudioBinder
       audioService.postValue(binder.getService())
-      serviceConnected = true
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
-      serviceConnected = false
+      audioService.postValue(null)
     }
   }
 

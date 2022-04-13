@@ -1,7 +1,7 @@
 package com.adtarassov.audioplayer.ui.sreen.audiolist
 
 import androidx.lifecycle.viewModelScope
-import com.adtarassov.audioplayer.data.AudioListRepository
+import com.adtarassov.audioplayer.data.AudioListHelper
 import com.adtarassov.audioplayer.data.AudioModel
 import com.adtarassov.audioplayer.ui.BaseFlowViewModel
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioClick
@@ -13,11 +13,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AudioListViewModel @Inject constructor(
-  private val repository: AudioListRepository,
+  private val repository: AudioListHelper,
   private val audioManager: AudioManager,
 ) : BaseFlowViewModel<AudioListViewState, AudioListAction, AudioListEvent>() {
 
   private fun onAudioClick(model: AudioModel) {
+    audioManager.getAudioService().value?.play(model.filePath)
   }
 
   private fun getAllAudio() {
