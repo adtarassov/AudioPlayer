@@ -42,6 +42,7 @@ dependencies {
   implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
   implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
   implementation 'androidx.lifecycle:lifecycle-service:2.4.1'
+  //implementation 'com.github.SimformSolutionsPvtLtd:SSffmpegVideoOperation:1.0.8' // increase apk size
   def navVersion = "2.4.2"
   def hiltVersion = "2.40.5"
 
