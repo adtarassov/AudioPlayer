@@ -1,23 +1,24 @@
 package com.adtarassov.audioplayer.ui.sreen.player.smallscreen
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.adtarassov.audioplayer.R
 import com.adtarassov.audioplayer.databinding.FragmentSmallPlayerBinding
 import com.adtarassov.audioplayer.ui.sreen.player.fullscreen.FullScreenPlayerFragment
-import com.adtarassov.audioplayer.ui.sreen.player.smallscreen.SmallPlayerViewState.IsPlaying
+import com.adtarassov.audioplayer.ui.sreen.player.smallscreen.SmallPlayerViewState.HasTrack
 import com.adtarassov.audioplayer.ui.sreen.player.smallscreen.SmallPlayerViewState.UnActivePayer
-import com.adtarassov.audioplayer.utils.player.AudioManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SmallPlayerFragment : Fragment() {
@@ -45,6 +46,9 @@ class SmallPlayerFragment : Fragment() {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
+    binding.buttonPlay.setOnClickListener {
+      viewModel.obtainEvent(SmallPlayerEvent.OnPlayButtonCLick)
+    }
   }
 
   private fun bindViewAction(action: SmallPlayerAction) {
@@ -52,10 +56,17 @@ class SmallPlayerFragment : Fragment() {
   }
 
   private fun bindViewState(state: SmallPlayerViewState) {
-    when(state) {
-      is IsPlaying -> {
+    when (state) {
+      is HasTrack -> {
         binding.root.isVisible = true
-        Log.d("adtarassov", "${state.title}, ${state.subtitle}")
+        binding.title.text = state.title
+        binding.subtitle.text = state.subtitle
+        val drawable = if (state.isPlaying) {
+          ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_pause_24)
+        } else {
+          ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_play_arrow_24)
+        }
+          binding.buttonPlay.setImageDrawable(drawable)
       }
       is UnActivePayer -> {
         binding.root.isVisible = false

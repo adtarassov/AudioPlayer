@@ -11,11 +11,11 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.adtarassov.audioplayer.R
 import com.adtarassov.audioplayer.data.AudioModel
-import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.BUFFERING
-import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.ENDED
-import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.IDLE
-import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.READY
-import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.UNKNOWN
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerState.BUFFERING
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerState.ENDED
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerState.IDLE
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerState.READY
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerState.UNKNOWN
 import com.google.android.exoplayer2.C.CONTENT_TYPE_MUSIC
 import com.google.android.exoplayer2.C.USAGE_MEDIA
 import com.google.android.exoplayer2.DefaultRenderersFactory
@@ -45,8 +45,8 @@ class AudioService : LifecycleService() {
   private val currentAudio: MutableStateFlow<AudioModel?> = MutableStateFlow(null)
   val currentAudioFlow: StateFlow<AudioModel?> = currentAudio
 
-  private val playerState: MutableStateFlow<PlayerStates> = MutableStateFlow(UNKNOWN)
-  val playerStateFlow: StateFlow<PlayerStates> = playerState
+  private val playerState: MutableStateFlow<PlayerState> = MutableStateFlow(UNKNOWN)
+  val playerStateFlow: StateFlow<PlayerState> = playerState
 
   private val isPlaying: MutableStateFlow<Boolean> = MutableStateFlow(false)
   val isPlayingFlow: StateFlow<Boolean> = isPlaying
@@ -124,28 +124,49 @@ class AudioService : LifecycleService() {
     }
   }
 
-  @MainThread
-  fun playerActionForcePlay(audioModel: AudioModel) {
+  fun playerActionForcePlay(audioModel: AudioModel?) {
     val player = audioPlayer ?: return
     player.stop()
     player.clearMediaItems()
-    val item = MediaItem.fromUri(Uri.parse(audioModel.filePath))
+    val item = MediaItem.fromUri(Uri.parse(audioModel?.filePath))
     player.addMediaItem(item)
     player.prepare()
-    player.playWhenReady = true
+    playerActionResume()
     lifecycleScope.launch {
       currentAudio.emit(audioModel)
     }
   }
 
-  @MainThread
-  fun playerActionResume() {
-    audioPlayer?.playWhenReady = true
+  fun playerChangePlayState() {
+    val prevState = audioPlayer?.isPlaying
+    if (prevState == false && audioPlayer?.playbackState == Player.STATE_ENDED) {
+      playerActionForcePlay(currentAudio.value)
+    }
+    val canPlay = prevState?.not() ?: false
+    if (canPlay) {
+      playerActionResume()
+    } else {
+      playerActionPause()
+    }
   }
 
-  @MainThread
-  fun playerActionPause() {
+  private fun playerActionResume() {
+    audioPlayer?.playWhenReady = true
+    lifecycleScope.launch {
+      this@AudioService.isPlaying.emit(true)
+    }
+  }
+
+  private fun playerActionPause() {
     audioPlayer?.playWhenReady = false
+    lifecycleScope.launch {
+      this@AudioService.isPlaying.emit(false)
+    }
+  }
+
+  private fun playerActionStop() {
+    playerActionPause()
+    audioPlayer?.stop()
   }
 
   private fun releasePlayer() {
@@ -159,9 +180,9 @@ class AudioService : LifecycleService() {
 
   private inner class PlayerEventListener : Player.Listener {
     override fun onIsPlayingChanged(isPlaying: Boolean) {
-      lifecycleScope.launch {
-        this@AudioService.isPlaying.emit(isPlaying)
-      }
+//      lifecycleScope.launch {
+//        this@AudioService.isPlaying.emit(isPlaying)
+//      }
     }
 
     override fun onPlaybackStateChanged(playbackState: Int) {
@@ -178,6 +199,7 @@ class AudioService : LifecycleService() {
           }
           Player.STATE_ENDED -> {
             playerState.emit(ENDED)
+            playerActionStop()
           }
           else -> {
             playerState.emit(UNKNOWN)
@@ -192,7 +214,7 @@ class AudioService : LifecycleService() {
     private const val PLAYBACK_NOTIFICATION_ID = 199
     private const val MEDIA_SESSION_TAG = "player_media_podcast"
 
-    enum class PlayerStates {
+    enum class PlayerState {
       IDLE, READY, BUFFERING, ENDED, UNKNOWN
     }
   }

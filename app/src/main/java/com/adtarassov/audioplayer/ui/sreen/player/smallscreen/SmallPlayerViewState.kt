@@ -1,6 +1,6 @@
 package com.adtarassov.audioplayer.ui.sreen.player.smallscreen
 
-sealed class SmallPlayerViewState {
-  data class IsPlaying(val title: String, val subtitle: String) : SmallPlayerViewState()
-  object UnActivePayer : SmallPlayerViewState()
+sealed interface SmallPlayerViewState {
+  data class HasTrack(val title: String, val subtitle: String, val isPlaying: Boolean) : SmallPlayerViewState
+  object UnActivePayer : SmallPlayerViewState
 }
