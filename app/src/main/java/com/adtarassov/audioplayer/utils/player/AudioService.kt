@@ -8,7 +8,14 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.MainThread
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.adtarassov.audioplayer.R
+import com.adtarassov.audioplayer.data.AudioModel
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.BUFFERING
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.ENDED
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.IDLE
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.READY
+import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStates.UNKNOWN
 import com.google.android.exoplayer2.C.CONTENT_TYPE_MUSIC
 import com.google.android.exoplayer2.C.USAGE_MEDIA
 import com.google.android.exoplayer2.DefaultRenderersFactory
@@ -18,6 +25,9 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 //https://github.com/google/ExoPlayer/blob/release-v2/RELEASENOTES.md
 //https://medium.com/ideas-by-idean/implement-podcast-in-a-service-with-exoplayer-and-hilt-2-2dc07d4d6f65
@@ -31,6 +41,15 @@ class AudioService : LifecycleService() {
   private var audioPlayer: ExoPlayer? = null
   private var playerNotificationManager: PlayerNotificationManager? = null
   private lateinit var mediaSession: MediaSessionCompat
+
+  private val currentAudio: MutableStateFlow<AudioModel?> = MutableStateFlow(null)
+  val currentAudioFlow: StateFlow<AudioModel?> = currentAudio
+
+  private val playerState: MutableStateFlow<PlayerStates> = MutableStateFlow(UNKNOWN)
+  val playerStateFlow: StateFlow<PlayerStates> = playerState
+
+  private val isPlaying: MutableStateFlow<Boolean> = MutableStateFlow(false)
+  val isPlayingFlow: StateFlow<Boolean> = isPlaying
 
   override fun onBind(intent: Intent): IBinder {
     super.onBind(intent)
@@ -106,14 +125,17 @@ class AudioService : LifecycleService() {
   }
 
   @MainThread
-  fun play(url: String) {
+  fun playerActionForcePlay(audioModel: AudioModel) {
     val player = audioPlayer ?: return
     player.stop()
     player.clearMediaItems()
-    val item = MediaItem.fromUri(Uri.parse(url))
+    val item = MediaItem.fromUri(Uri.parse(audioModel.filePath))
     player.addMediaItem(item)
     player.prepare()
     player.playWhenReady = true
+    lifecycleScope.launch {
+      currentAudio.emit(audioModel)
+    }
   }
 
   @MainThread
@@ -136,12 +158,42 @@ class AudioService : LifecycleService() {
   }
 
   private inner class PlayerEventListener : Player.Listener {
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+      lifecycleScope.launch {
+        this@AudioService.isPlaying.emit(isPlaying)
+      }
+    }
 
+    override fun onPlaybackStateChanged(playbackState: Int) {
+      lifecycleScope.launch {
+        when (playbackState) {
+          Player.STATE_IDLE -> {
+            playerState.emit(IDLE)
+          }
+          Player.STATE_BUFFERING -> {
+            playerState.emit(BUFFERING)
+          }
+          Player.STATE_READY -> {
+            playerState.emit(READY)
+          }
+          Player.STATE_ENDED -> {
+            playerState.emit(ENDED)
+          }
+          else -> {
+            playerState.emit(UNKNOWN)
+          }
+        }
+      }
+    }
   }
 
   companion object {
     private const val PLAYBACK_CHANNEL_ID = "playback_channel"
     private const val PLAYBACK_NOTIFICATION_ID = 199
     private const val MEDIA_SESSION_TAG = "player_media_podcast"
+
+    enum class PlayerStates {
+      IDLE, READY, BUFFERING, ENDED, UNKNOWN
+    }
   }
 }

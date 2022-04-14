@@ -16,11 +16,3 @@ fun View.setVisible() {
   if (visibility == View.VISIBLE) return
   visibility = View.VISIBLE
 }
-
-var View.isVisible: Boolean
-  get() = visibility == View.VISIBLE
-  set(value) {
-    if (value != isVisible) {
-      visibility = if (value) View.VISIBLE else View.GONE
-    }
-  }

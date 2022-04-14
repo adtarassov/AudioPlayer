@@ -7,26 +7,39 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.adtarassov.audioplayer.di.ApplicationScope
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AudioManager @Inject constructor(
   @ApplicationContext
-  private val context: Context
+  private val context: Context,
+  @ApplicationScope
+  private val externalScope: CoroutineScope
 ) {
-  private val audioService: MutableLiveData<AudioService?> = MutableLiveData(null)
-  fun getAudioService(): LiveData<AudioService?> = audioService
+  private val audioService: MutableStateFlow<AudioService?> = MutableStateFlow(null)
+  val audioServiceFlow: StateFlow<AudioService?> = audioService
 
   private val connection = object : ServiceConnection {
     override fun onServiceConnected(className: ComponentName, service: IBinder) {
       val binder = service as AudioService.AudioBinder
-      audioService.postValue(binder.getService())
+      externalScope.launch {
+        audioService.emit(binder.getService())
+      }
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
-      audioService.postValue(null)
+      externalScope.launch {
+        audioService.emit(null)
+      }
     }
   }
 

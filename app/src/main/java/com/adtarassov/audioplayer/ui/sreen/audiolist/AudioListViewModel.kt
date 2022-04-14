@@ -18,7 +18,7 @@ class AudioListViewModel @Inject constructor(
 ) : BaseFlowViewModel<AudioListViewState, AudioListAction, AudioListEvent>() {
 
   private fun onAudioClick(model: AudioModel) {
-    audioManager.getAudioService().value?.play(model.filePath)
+    audioManager.audioServiceFlow.value?.playerActionForcePlay(model)
   }
 
   private fun getAllAudio() {
