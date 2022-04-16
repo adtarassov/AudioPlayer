@@ -1,4 +1,6 @@
 package com.adtarassov.audioplayer.ui.sreen.player.fullscreen
 
-sealed class FullScreenPlayerEvent {
+sealed interface FullScreenPlayerEvent {
+  object OnPlayButtonClick : FullScreenPlayerEvent
+  data class OnSeekChange(val progress: Int) : FullScreenPlayerEvent
 }

@@ -139,7 +139,10 @@ class AudioService : LifecycleService() {
 
   fun playerChangePlayState() {
     val prevState = audioPlayer?.isPlaying
-    if (prevState == false && audioPlayer?.playbackState == Player.STATE_ENDED) {
+    if (
+      prevState == false &&
+      (audioPlayer?.playbackState == Player.STATE_ENDED || audioPlayer?.playbackState == Player.STATE_IDLE)
+    ) {
       playerActionForcePlay(currentAudio.value)
     }
     val canPlay = prevState?.not() ?: false
@@ -149,6 +152,14 @@ class AudioService : LifecycleService() {
       playerActionPause()
     }
   }
+
+  fun playerSeekChange(progress: Int) {
+    val durationMs = currentAudio.value?.durationMs ?: return
+    val positionMs = (durationMs * progress) / 100
+    audioPlayer?.seekTo(positionMs)
+  }
+
+  fun getPlayerPosition(): Long = audioPlayer?.currentPosition ?: 0
 
   private fun playerActionResume() {
     audioPlayer?.playWhenReady = true
@@ -165,6 +176,7 @@ class AudioService : LifecycleService() {
   }
 
   private fun playerActionStop() {
+    playerSeekChange(0)
     playerActionPause()
     audioPlayer?.stop()
   }
@@ -198,8 +210,8 @@ class AudioService : LifecycleService() {
             playerState.emit(READY)
           }
           Player.STATE_ENDED -> {
-            playerState.emit(ENDED)
             playerActionStop()
+            playerState.emit(ENDED)
           }
           else -> {
             playerState.emit(UNKNOWN)

@@ -1,8 +1,6 @@
 package com.adtarassov.audioplayer.ui.sreen.player.smallscreen
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +45,7 @@ class SmallPlayerFragment : Fragment() {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
     binding.buttonPlay.setOnClickListener {
-      viewModel.obtainEvent(SmallPlayerEvent.OnPlayButtonCLick)
+      viewModel.obtainEvent(SmallPlayerEvent.OnPlayButtonClick)
     }
   }
 

@@ -1,17 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
     >
-  <!--android:layout_height="wrap_content" is important-->
 
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:text="asd"
-      android:textColor="@color/white"
+  <ImageView
+      android:id="@+id/image_album"
+      android:layout_width="216dp"
+      android:layout_height="216dp"
+      android:layout_marginTop="32dp"
+      android:scaleType="centerCrop"
+      android:src="@drawable/ic_empty_album"
+      app:layout_constraintBottom_toTopOf="@id/title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
       />
 
-</FrameLayout>
+  <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toTopOf="@id/subtitle"
+      app:layout_constraintEnd_toEndOf="@id/image_album"
+      app:layout_constraintStart_toStartOf="@id/image_album"
+      app:layout_constraintTop_toBottomOf="@id/image_album"
+      tools:text="Title"
+      />
+
+  <TextView
+      android:id="@+id/subtitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:textSize="13sp"
+      app:layout_constraintBottom_toTopOf="@id/audio_progress_seek"
+
+      app:layout_constraintEnd_toEndOf="@id/title"
+      app:layout_constraintStart_toStartOf="@id/title"
+      app:layout_constraintTop_toBottomOf="@id/title"
+      tools:text="subtitle"
+      />
+
+  <SeekBar
+      android:id="@+id/audio_progress_seek"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+
+      app:layout_constraintBottom_toTopOf="@id/button_play"
+      app:layout_constraintEnd_toEndOf="@id/image_album"
+      app:layout_constraintStart_toStartOf="@id/image_album"
+      app:layout_constraintTop_toBottomOf="@id/subtitle"
+      />
+
+  <ImageView
+      android:id="@+id/button_play"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="32dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/button_play"
+      app:layout_constraintEnd_toEndOf="@id/image_album"
+      app:layout_constraintStart_toStartOf="@id/image_album"
+      app:layout_constraintTop_toBottomOf="@id/audio_progress_seek"
+      android:src="@drawable/ic_baseline_play_arrow_24"
+      />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

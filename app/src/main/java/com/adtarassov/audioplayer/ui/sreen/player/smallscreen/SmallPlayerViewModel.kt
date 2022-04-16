@@ -10,7 +10,6 @@ import com.adtarassov.audioplayer.utils.player.AudioService.Companion.PlayerStat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,7 +47,7 @@ class SmallPlayerViewModel @Inject constructor(
   override fun obtainEvent(viewEvent: SmallPlayerEvent) {
     viewModelScope.launch {
       when (viewEvent) {
-        is SmallPlayerEvent.OnPlayButtonCLick -> {
+        is SmallPlayerEvent.OnPlayButtonClick -> {
           audioManager.audioServiceFlow.collect { audioService ->
             audioService?.playerChangePlayState()
           }
