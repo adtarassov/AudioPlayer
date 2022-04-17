@@ -85,6 +85,11 @@ class FullScreenPlayerFragment : BottomSheetDialogFragment() {
         }
         binding.buttonPlay.setImageDrawable(drawable)
         binding.audioProgressSeek.progress = state.audioProgress
+        if (state.isPlaying) {
+          binding.imageAlbum.resumeAnimation()
+        } else {
+          binding.imageAlbum.pauseAnimation()
+        }
         seekBarAnimator?.removeAllListeners()
         seekBarAnimator?.cancel()
         seekBarAnimator = ValueAnimator.ofInt(state.audioProgress, binding.audioProgressSeek.max).apply {
@@ -103,5 +108,4 @@ class FullScreenPlayerFragment : BottomSheetDialogFragment() {
       }
     }
   }
-
 }

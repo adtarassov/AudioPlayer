@@ -7,17 +7,18 @@
     android:layout_height="wrap_content"
     >
 
-  <ImageView
+  <com.airbnb.lottie.LottieAnimationView
       android:id="@+id/image_album"
-      android:layout_width="216dp"
+      android:layout_width="264dp"
       android:layout_height="216dp"
-      android:layout_marginTop="32dp"
-      android:scaleType="centerCrop"
-      android:src="@drawable/ic_empty_album"
+      android:layout_marginTop="16dp"
       app:layout_constraintBottom_toTopOf="@id/title"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      app:lottie_autoPlay="true"
+      app:lottie_loop="true"
+      app:lottie_rawRes="@raw/lottie_sound_anim"
       />
 
   <TextView
@@ -25,6 +26,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
+      android:textColor="@color/main"
       android:textSize="18sp"
       app:layout_constraintBottom_toTopOf="@id/subtitle"
       app:layout_constraintEnd_toEndOf="@id/image_album"
@@ -38,9 +40,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="4dp"
+      android:textColor="@color/minor"
       android:textSize="13sp"
       app:layout_constraintBottom_toTopOf="@id/audio_progress_seek"
-
       app:layout_constraintEnd_toEndOf="@id/title"
       app:layout_constraintStart_toStartOf="@id/title"
       app:layout_constraintTop_toBottomOf="@id/title"
@@ -52,11 +54,14 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
-
       app:layout_constraintBottom_toTopOf="@id/button_play"
       app:layout_constraintEnd_toEndOf="@id/image_album"
       app:layout_constraintStart_toStartOf="@id/image_album"
       app:layout_constraintTop_toBottomOf="@id/subtitle"
+      android:progressTint="@color/main"
+      android:thumbTint="@color/main"
+      android:progressBackgroundTint="@color/minor"
+      tools:progress="50"
       />
 
   <ImageView
@@ -65,12 +70,13 @@
       android:layout_height="48dp"
       android:layout_marginTop="8dp"
       android:layout_marginBottom="32dp"
+      android:src="@drawable/ic_baseline_play_arrow_24"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintBottom_toTopOf="@id/button_play"
       app:layout_constraintEnd_toEndOf="@id/image_album"
       app:layout_constraintStart_toStartOf="@id/image_album"
       app:layout_constraintTop_toBottomOf="@id/audio_progress_seek"
-      android:src="@drawable/ic_baseline_play_arrow_24"
+      app:tint="@color/main"
       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

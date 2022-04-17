@@ -49,11 +49,7 @@ class AudioListFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     binding.audioListRecyclerView.adapter = adapter
     binding.audioListRecyclerView.layoutManager = LinearLayoutManager(context)
-    AppCompatResources.getDrawable(view.context, R.drawable.divider_drawable)?.let {
-      val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
-      dividerItemDecoration.setDrawable(it)
-      binding.audioListRecyclerView.addItemDecoration(dividerItemDecoration)
-    }
+    binding.audioListRecyclerView.addItemDecoration(MarginItemDecoration(12))
     lifecycleScope.launchWhenCreated {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
