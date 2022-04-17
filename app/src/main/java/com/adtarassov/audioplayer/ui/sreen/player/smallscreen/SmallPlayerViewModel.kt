@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SmallPlayerViewModel @Inject constructor(
-  private val audioManager: AudioManager,
+  private val audioManager: AudioManager
 ) : BaseFlowViewModel<SmallPlayerViewState, SmallPlayerAction, SmallPlayerEvent>() {
 
   init {
@@ -45,13 +45,9 @@ class SmallPlayerViewModel @Inject constructor(
   }
 
   override fun obtainEvent(viewEvent: SmallPlayerEvent) {
-    viewModelScope.launch {
-      when (viewEvent) {
-        is SmallPlayerEvent.OnPlayButtonClick -> {
-          audioManager.audioServiceFlow.collect { audioService ->
-            audioService?.playerChangePlayState()
-          }
-        }
+    when (viewEvent) {
+      is SmallPlayerEvent.OnPlayButtonClick -> {
+        audioManager.audioServiceValue()?.playerChangePlayState()
       }
     }
   }
@@ -59,7 +55,7 @@ class SmallPlayerViewModel @Inject constructor(
   private class CombinedModel(
     val currentAudio: AudioModel?,
     val playerState: PlayerState,
-    val isPlaying: Boolean
+    val isPlaying: Boolean,
   )
 
 }

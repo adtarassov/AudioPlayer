@@ -27,6 +27,7 @@ class AudioManager @Inject constructor(
 ) {
   private val audioService: MutableStateFlow<AudioService?> = MutableStateFlow(null)
   val audioServiceFlow: StateFlow<AudioService?> = audioService
+  fun audioServiceValue() = audioServiceFlow.value
 
   private val connection = object : ServiceConnection {
     override fun onServiceConnected(className: ComponentName, service: IBinder) {

@@ -52,18 +52,12 @@ class FullScreenPlayerViewModel @Inject constructor(
   }
 
   override fun obtainEvent(viewEvent: FullScreenPlayerEvent) {
-    viewModelScope.launch {
-      when (viewEvent) {
-        is FullScreenPlayerEvent.OnPlayButtonClick -> {
-          audioManager.audioServiceFlow.collect { audioService ->
-            audioService?.playerChangePlayState()
-          }
-        }
-        is FullScreenPlayerEvent.OnSeekChange -> {
-          audioManager.audioServiceFlow.collect { audioService ->
-            audioService?.playerSeekChange(viewEvent.progress)
-          }
-        }
+    when (viewEvent) {
+      is FullScreenPlayerEvent.OnPlayButtonClick -> {
+        audioManager.audioServiceValue()?.playerChangePlayState()
+      }
+      is FullScreenPlayerEvent.OnSeekChange -> {
+        audioManager.audioServiceValue()?.playerSeekChange(viewEvent.progress)
       }
     }
   }
