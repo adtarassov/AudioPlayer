@@ -2,9 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <item android:title="Home"
-      android:icon="@drawable/ic_baseline_home_24"
-      android:id="@+id/home_fragment"/>
+  <item android:title="Library"
+      android:icon="@drawable/ic_podcast_library_24"
+      android:id="@+id/audio_list_fragment"/>
 
   <item android:title="Create"
       android:icon="@drawable/ic_baseline_add_circle_24"

@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.filterNotNull
 class MainActivity : AppCompatActivity() {
 
   private val viewModel: MainActivityViewModel by viewModels()
-  private val appBarConfiguration = AppBarConfiguration(setOf(id.home_fragment, id.profile_fragment))
+  private val appBarConfiguration = AppBarConfiguration(setOf(id.audio_list_fragment, id.profile_fragment))
 
   private lateinit var binding: ActivityMainBinding
   private lateinit var navController: NavController

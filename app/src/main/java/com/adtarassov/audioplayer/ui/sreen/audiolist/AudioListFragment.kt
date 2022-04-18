@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.filterNotNull
 class AudioListFragment : Fragment() {
 
   private val viewModel: AudioListViewModel by viewModels()
-  private val args:  AudioListFragmentArgs by navArgs()
   private val adapter = AudioListAdapter {
     viewModel.obtainEvent(AudioListEvent.OnAudioClick(it))
   }
@@ -41,7 +40,6 @@ class AudioListFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
-    audioListType = AudioListType.typeById(args.listType)
     return binding.root
   }
 
