@@ -1,4 +1,4 @@
 package com.adtarassov.audioplayer.ui.sreen.audiolist
 
-class AudioListAction {
+sealed interface AudioListAction {
 }
