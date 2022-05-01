@@ -8,7 +8,7 @@
   <fragment
       android:id="@+id/audio_list_fragment"
       android:name="com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListFragment"
-      android:label="Мои аудио"
+      android:label="@string/menu_library"
       tools:layout="@layout/fragment_audio_list">
     <argument
         android:name="list_type"
@@ -19,7 +19,17 @@
   <fragment
       android:id="@+id/profile_fragment"
       android:name="com.adtarassov.audioplayer.ui.sreen.profile.ProfileFragment"
-      android:label="fragment_profile"
-      tools:layout="@layout/fragment_profile" />
+      android:label="@string/menu_profile"
+      tools:layout="@layout/fragment_profile" >
+    <action
+        android:id="@+id/action_profile_fragment_to_authorizationFragment"
+        app:destination="@id/authorization_fragment" />
+  </fragment>
+
+  <dialog
+      android:id="@+id/authorization_fragment"
+      android:name="com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationFragment"
+      android:label="fragment_authorization"
+      tools:layout="@layout/fragment_authorization" />
 
 </navigation>

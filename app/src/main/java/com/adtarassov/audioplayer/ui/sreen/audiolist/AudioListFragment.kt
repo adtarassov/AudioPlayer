@@ -50,6 +50,8 @@ class AudioListFragment : Fragment() {
     binding.audioListRecyclerView.addItemDecoration(MarginItemDecoration(12))
     lifecycleScope.launchWhenCreated {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
+    }
+    lifecycleScope.launchWhenCreated {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
     viewModel.obtainEvent(AudioListEvent.ViewCreated)

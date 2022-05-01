@@ -2,15 +2,15 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <item android:title="Library"
+  <item android:title="@string/menu_library"
       android:icon="@drawable/ic_podcast_library_24"
       android:id="@+id/audio_list_fragment"/>
 
-  <item android:title="Create"
+  <item android:title="@string/menu_create"
       android:icon="@drawable/ic_baseline_add_circle_24"
       android:id="@+id/recorde_audio_fragment"/>
 
-  <item android:title="Profile"
+  <item android:title="@string/menu_profile"
       android:icon="@drawable/ic_baseline_person_24"
       android:id="@+id/profile_fragment"/>
 

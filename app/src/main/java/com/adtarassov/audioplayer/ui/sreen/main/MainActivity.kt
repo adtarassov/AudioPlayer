@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     setupNavigation()
     lifecycleScope.launchWhenCreated {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
+    }
+    lifecycleScope.launchWhenCreated {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
   }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    >
+
+  <TextView
+      android:layout_marginStart="4dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Авторизация"
+      android:textColor="@color/main"
+      android:textSize="21sp"
+      />
+
+  <EditText
+      android:id="@+id/username_et"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:backgroundTint="@color/item_background"
+      android:hint="Имя пользователя"
+      android:textColor="@color/main"
+      android:textColorHint="@color/minor"
+      />
+
+  <EditText
+      android:id="@+id/password_et"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:backgroundTint="@color/item_background"
+      android:hint="Пароль"
+      android:inputType="textPassword"
+      android:textColor="@color/main"
+      android:textColorHint="@color/minor"
+      />
+
+  <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/auth_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      style="@style/MainButton"
+      android:text="@string/authorize_enter"
+      />
+
+</LinearLayout>

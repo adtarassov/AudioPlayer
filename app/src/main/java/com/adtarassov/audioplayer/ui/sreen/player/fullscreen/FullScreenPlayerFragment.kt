@@ -41,6 +41,8 @@ class FullScreenPlayerFragment : BottomSheetDialogFragment() {
     super.onViewCreated(view, savedInstanceState)
     lifecycleScope.launchWhenCreated {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
+    }
+    lifecycleScope.launchWhenCreated {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
     binding.buttonPlay.setOnClickListener {
