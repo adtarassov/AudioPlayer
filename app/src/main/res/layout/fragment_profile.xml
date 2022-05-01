@@ -11,6 +11,7 @@
       android:id="@+id/authorization_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
       android:gravity="center"
       android:orientation="vertical"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -39,10 +40,10 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/auth_button"
+        style="@style/MainButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        style="@style/MainButton"
         android:text="@string/authorize_enter"
         />
 
