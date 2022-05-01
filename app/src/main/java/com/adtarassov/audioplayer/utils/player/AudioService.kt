@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 //https://github.com/google/ExoPlayer/blob/release-v2/RELEASENOTES.md
 //https://medium.com/ideas-by-idean/implement-podcast-in-a-service-with-exoplayer-and-hilt-2-2dc07d4d6f65
 //https://medium.com/@mgazar/playing-local-and-remote-media-files-on-android-using-exoplayer-d4ef53d7c369
+//https://swiftbook.ru/post/tutorials/android-services-getting-startedandroid-services-getting-started/
 
 @AndroidEntryPoint
 class AudioService : LifecycleService() {
