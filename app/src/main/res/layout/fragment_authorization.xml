@@ -10,9 +10,9 @@
     >
 
   <TextView
-      android:layout_marginStart="4dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginStart="4dp"
       android:text="Авторизация"
       android:textColor="@color/main"
       android:textSize="21sp"
@@ -41,12 +41,23 @@
       android:textColorHint="@color/minor"
       />
 
+  <TextView
+      android:id="@+id/error_tv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="4dp"
+      android:layout_marginTop="8dp"
+      android:textColor="@color/red"
+      android:textSize="14sp"
+      android:visibility="gone"
+      />
+
   <androidx.appcompat.widget.AppCompatButton
       android:id="@+id/auth_button"
+      style="@style/MainButton"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
-      style="@style/MainButton"
       android:text="@string/authorize_enter"
       />
 
