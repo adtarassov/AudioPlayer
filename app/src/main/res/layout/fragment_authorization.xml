@@ -1,64 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingHorizontal="8dp"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     >
 
-  <TextView
+  <ProgressBar
+      android:id="@+id/progress_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="4dp"
-      android:text="Авторизация"
-      android:textColor="@color/main"
-      android:textSize="21sp"
-      />
-
-  <EditText
-      android:id="@+id/username_et"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:backgroundTint="@color/item_background"
-      android:hint="Имя пользователя"
-      android:textColor="@color/main"
-      android:textColorHint="@color/minor"
-      />
-
-  <EditText
-      android:id="@+id/password_et"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:backgroundTint="@color/item_background"
-      android:hint="Пароль"
-      android:inputType="textPassword"
-      android:textColor="@color/main"
-      android:textColorHint="@color/minor"
-      />
-
-  <TextView
-      android:id="@+id/error_tv"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="4dp"
-      android:layout_marginTop="8dp"
-      android:textColor="@color/red"
-      android:textSize="14sp"
+      android:layout_gravity="center"
+      android:indeterminateTint="@color/main"
       android:visibility="gone"
       />
 
-  <androidx.appcompat.widget.AppCompatButton
-      android:id="@+id/auth_button"
-      style="@style/MainButton"
+  <LinearLayout
+      android:id="@+id/auth_view"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:text="@string/authorize_enter"
-      />
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:paddingHorizontal="8dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      tools:ignore="UselessParent"
+      >
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="Авторизация"
+        android:textColor="@color/main"
+        android:textSize="21sp"
+        />
+
+    <EditText
+        android:id="@+id/username_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/item_background"
+        android:hint="Имя пользователя"
+        android:textColor="@color/main"
+        android:textColorHint="@color/minor"
+        />
+
+    <EditText
+        android:id="@+id/password_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/item_background"
+        android:hint="Пароль"
+        android:inputType="textPassword"
+        android:textColor="@color/main"
+        android:textColorHint="@color/minor"
+        />
+
+    <TextView
+        android:id="@+id/error_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/red"
+        android:textSize="14sp"
+        android:visibility="gone"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/auth_button"
+        style="@style/MainButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/authorize_enter"
+        />
+
+  </LinearLayout>
+
+</FrameLayout>

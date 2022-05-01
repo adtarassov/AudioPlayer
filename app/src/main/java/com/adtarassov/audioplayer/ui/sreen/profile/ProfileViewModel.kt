@@ -22,9 +22,15 @@ class ProfileViewModel @Inject constructor(
       preferences.userTokenFlow.collect { userToken ->
         if (userToken == null) {
           viewState = Unauthorized
+        } else {
+          getUserData()
         }
       }
     }
+  }
+
+  private suspend fun getUserData() {
+    viewState = Loading
   }
 
   override fun obtainEvent(viewEvent: ProfileEvent) {

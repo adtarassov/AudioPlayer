@@ -58,6 +58,11 @@ class ProfileFragment : Fragment() {
     when (state) {
       is ProfileViewState.Unauthorized -> {
         binding.authorizationView.isVisible = true
+        binding.progressView.isVisible = false
+      }
+      is ProfileViewState.Loading -> {
+        binding.authorizationView.isVisible = false
+        binding.progressView.isVisible = true
       }
     }
   }
