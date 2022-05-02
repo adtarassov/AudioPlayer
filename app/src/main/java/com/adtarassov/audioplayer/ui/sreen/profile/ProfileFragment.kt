@@ -80,7 +80,11 @@ class ProfileFragment : Fragment() {
     val bundle = bundleOf(AudioListType.BUNDLE_KEY to AudioListType.LOCAL.id)
     parentFragmentManager.commit {
       setReorderingAllowed(true)
-      replace<AudioListFragment>(binding.audioListFragmentContainer.id, args = bundle, tag = "user_audio_list")
+      replace<AudioListFragment>(
+        binding.audioListFragmentContainer.id,
+        args = bundle,
+        tag = USER_AUDIO_LIST_FRAGMENT_TAG
+      )
     }
     binding.audioListFragmentContainer.isVisible = true
   }
@@ -92,7 +96,7 @@ class ProfileFragment : Fragment() {
         binding.authorizationView.isVisible = true
         binding.progressView.isVisible = false
 
-        val prevFragment = parentFragmentManager.findFragmentByTag("user_audio_list")
+        val prevFragment = parentFragmentManager.findFragmentByTag(USER_AUDIO_LIST_FRAGMENT_TAG)
         binding.audioListFragmentContainer.isVisible = false
         prevFragment?.let {
           parentFragmentManager.commit {
@@ -131,6 +135,10 @@ class ProfileFragment : Fragment() {
         bindAudioListFragment()
       }
     }
+  }
+
+  companion object {
+    const val USER_AUDIO_LIST_FRAGMENT_TAG = "user_audio_list"
   }
 
 }
