@@ -11,8 +11,8 @@
       android:label="@string/menu_library"
       tools:layout="@layout/fragment_audio_list">
     <argument
-        android:name="list_type"
-        android:defaultValue="-1"
+        android:name="audio_list_type"
+        android:defaultValue="0"
         app:argType="integer" />
   </fragment>
 

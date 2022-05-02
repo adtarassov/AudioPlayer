@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -18,6 +19,7 @@ import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoa
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoaded
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.Loading
 import com.adtarassov.audioplayer.utils.AudioListType
+import com.adtarassov.audioplayer.utils.AudioListType.Companion
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
@@ -40,6 +42,7 @@ class AudioListFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
+    audioListType = AudioListType.typeById(arguments?.getInt(AudioListType.BUNDLE_KEY) ?: AudioListType.All.id)
     return binding.root
   }
 
@@ -60,12 +63,17 @@ class AudioListFragment : Fragment() {
   private fun bindViewState(state: AudioListViewState) {
     when (state) {
       is AudioLoadFailure -> {
-
+        binding.audioListRecyclerView.isVisible = false
+        binding.progressView.isVisible = false
       }
       is AudioLoaded -> {
+        binding.progressView.isVisible = false
+        binding.audioListRecyclerView.isVisible = true
         adapter.refreshAudioList(state.list)
       }
       is Loading -> {
+        binding.audioListRecyclerView.isVisible = false
+        binding.progressView.isVisible = true
       }
     }
   }

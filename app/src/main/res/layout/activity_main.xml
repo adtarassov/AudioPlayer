@@ -32,7 +32,7 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       app:defaultNavHost="true"
-      app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+      app:layout_constraintBottom_toTopOf="@id/fragment_player_container_view"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@id/app_bar"
@@ -61,7 +61,6 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/nav_host_fragment"
       app:menu="@menu/bottom_navigation"
       tools:visibility="visible"
       />
