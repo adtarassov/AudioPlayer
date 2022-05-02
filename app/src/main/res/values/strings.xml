@@ -5,7 +5,9 @@
   <string name="authorized_title">Требуется авторизация</string>
   <string name="authorized_subtitle">Для просмотра страницы пользователя требуется авторизация</string>
   <string name="authorize_enter">Войти</string>
+  <string name="authorize_registration">Регистрация</string>
   <string name="menu_library">Library</string>
   <string name="menu_create">Create</string>
   <string name="menu_profile">Profile</string>
+  <string name="authorize">Авторизация</string>
 </resources>

@@ -30,6 +30,12 @@
       android:id="@+id/authorization_fragment"
       android:name="com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationFragment"
       android:label="fragment_authorization"
-      tools:layout="@layout/fragment_authorization" />
+      tools:layout="@layout/fragment_authorization">
+    <argument
+        android:name="auth_type"
+        android:defaultValue="0"
+        app:argType="integer" />
+  </dialog>
+
 
 </navigation>

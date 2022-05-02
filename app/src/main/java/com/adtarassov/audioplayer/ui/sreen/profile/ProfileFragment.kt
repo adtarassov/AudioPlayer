@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.adtarassov.audioplayer.databinding.FragmentProfileBinding
+import com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationFragment
 import com.adtarassov.audioplayer.ui.sreen.player.fullscreen.FullScreenPlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -30,7 +31,10 @@ class ProfileFragment : Fragment() {
   ): View {
     _binding = FragmentProfileBinding.inflate(inflater, container, false)
     binding.authButton.setOnClickListener {
-      openAuthFragment()
+      openAuthFragment(AuthorizationFragment.Companion.AuthType.AUTHORIZATION)
+    }
+    binding.registrationButton.setOnClickListener {
+      openAuthFragment(AuthorizationFragment.Companion.AuthType.REGISTRATION)
     }
     return binding.root
   }
@@ -45,8 +49,10 @@ class ProfileFragment : Fragment() {
     }
   }
 
-  private fun openAuthFragment() {
-    val navAction = ProfileFragmentDirections.actionProfileFragmentToAuthorizationFragment()
+  private fun openAuthFragment(type: AuthorizationFragment.Companion.AuthType) {
+    val navAction = ProfileFragmentDirections.actionProfileFragmentToAuthorizationFragment(
+      authType = type.id
+    )
     findNavController().navigate(navAction)
   }
 
