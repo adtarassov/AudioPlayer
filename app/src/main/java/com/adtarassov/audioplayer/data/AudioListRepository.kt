@@ -27,9 +27,16 @@ class AudioListRepository @Inject constructor(
         title = it.name,
         subtitle = it.description,
         durationMs = 10000,
-        filePath = it.audioUrl
+        filePath = it.audioUrl,
+        isLiked = false
       )
     }
+  }
+
+  suspend fun setLikeAudio(audioModel: AudioModel): Boolean {
+    delay(1000)
+    val result = true
+    return result
   }
 
   suspend fun getAudioProfileList(accountName: String): List<AudioModel> {
@@ -41,7 +48,8 @@ class AudioListRepository @Inject constructor(
         title = it.name,
         subtitle = it.description,
         durationMs = 10000,
-        filePath = it.audioUrl
+        filePath = it.audioUrl,
+        isLiked = false
       )
     }
   }
@@ -68,7 +76,8 @@ class AudioListRepository @Inject constructor(
               title = title,
               subtitle = null,
               durationMs = duration,
-              filePath = path
+              filePath = path,
+              isLiked = false
             )
           )
         }

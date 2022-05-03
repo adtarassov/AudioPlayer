@@ -23,9 +23,10 @@ import kotlinx.coroutines.flow.filterNotNull
 class AudioListFragment : Fragment() {
 
   private val viewModel: AudioListViewModel by viewModels()
-  private val adapter = AudioListAdapter {
-    viewModel.obtainEvent(AudioListEvent.OnAudioClick(it))
-  }
+  private val adapter = AudioListAdapter(
+    { viewModel.obtainEvent(AudioListEvent.OnAudioClick(it)) },
+    { viewModel.obtainEvent(AudioListEvent.OnAudioLikeClick(it)) }
+  )
 
   private lateinit var audioListType: AudioListType
   private lateinit var profilePageType: ProfilePageType
@@ -36,10 +37,11 @@ class AudioListFragment : Fragment() {
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
-    audioListType = AudioListType.typeById(arguments?.getInt(AudioListType.BUNDLE_KEY) ?: AudioListType.RECOMMENDATION.id)
+    audioListType =
+      AudioListType.typeById(arguments?.getInt(AudioListType.BUNDLE_KEY) ?: AudioListType.RECOMMENDATION.id)
     profilePageType = ProfilePageType.typeById(arguments?.getInt(ProfilePageType.BUNDLE_KEY) ?: ProfilePageType.MAIN.id)
     accountName = arguments?.getString(ProfilePageType.USER_ACCOUNT_NAME_KEY) ?: ""
     return binding.root
@@ -56,7 +58,7 @@ class AudioListFragment : Fragment() {
     lifecycleScope.launchWhenCreated {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
-    viewModel.obtainEvent(AudioListEvent.ViewCreated(audioListType, accountName))
+    viewModel.obtainEvent(AudioListEvent.ShowAudioList(audioListType, accountName))
   }
 
   private fun bindViewState(state: AudioListViewState) {
@@ -64,15 +66,19 @@ class AudioListFragment : Fragment() {
       is AudioLoadFailure -> {
         binding.audioListRecyclerView.isVisible = false
         binding.progressView.isVisible = false
+        binding.errorTv.isVisible = true
+        binding.errorTv.text = state.errorMessage
       }
       is AudioLoaded -> {
         binding.progressView.isVisible = false
         binding.audioListRecyclerView.isVisible = true
+        binding.errorTv.isVisible = false
         adapter.refreshAudioList(state.list)
       }
       is Loading -> {
         binding.audioListRecyclerView.isVisible = false
         binding.progressView.isVisible = true
+        binding.errorTv.isVisible = false
       }
     }
   }

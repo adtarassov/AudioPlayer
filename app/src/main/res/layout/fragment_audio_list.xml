@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.sreen.audiolist.AudioListFragment"
     android:background="@color/background_screen"
+    tools:context=".ui.sreen.audiolist.AudioListFragment"
     >
 
   <ProgressBar
@@ -16,6 +16,18 @@
       android:indeterminateTint="@color/main"
       android:visibility="gone"
       tools:visibility="visible"
+      />
+
+  <TextView
+      android:id="@+id/error_tv"
+      android:layout_width="match_parent"
+      android:layout_marginHorizontal="16dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:visibility="gone"
+      android:textColor="@color/main"
+      android:textSize="18sp"
       />
 
   <androidx.recyclerview.widget.RecyclerView

@@ -3,14 +3,13 @@ package com.adtarassov.audioplayer.ui.sreen.audiolist
 import androidx.lifecycle.viewModelScope
 import com.adtarassov.audioplayer.data.AudioListRepository
 import com.adtarassov.audioplayer.data.AudioModel
-import com.adtarassov.audioplayer.data.SharedPreferences
 import com.adtarassov.audioplayer.ui.BaseFlowViewModel
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioClick
-import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.ViewCreated
+import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioLikeClick
+import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.ShowAudioList
 import com.adtarassov.audioplayer.utils.AudioListType.LOCAL
 import com.adtarassov.audioplayer.utils.AudioListType.PROFILE
 import com.adtarassov.audioplayer.utils.AudioListType.RECOMMENDATION
-import com.adtarassov.audioplayer.utils.ProfilePageType
 import com.adtarassov.audioplayer.utils.player.AudioManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -20,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AudioListViewModel @Inject constructor(
   private val repository: AudioListRepository,
-  private val audioManager: AudioManager
+  private val audioManager: AudioManager,
 ) : BaseFlowViewModel<AudioListViewState, AudioListAction, AudioListEvent>() {
 
   private val handler = CoroutineExceptionHandler { _, exception ->
@@ -30,6 +29,11 @@ class AudioListViewModel @Inject constructor(
 
   private fun onAudioClick(model: AudioModel) {
     audioManager.audioServiceFlow.value?.playerActionForcePlay(model)
+  }
+
+  private fun onAudioLikeClicked(model: AudioModel) {
+    viewModelScope.launch(handler) {
+    }
   }
 
   private fun showAudioRecommendationList() {
@@ -58,12 +62,13 @@ class AudioListViewModel @Inject constructor(
 
   override fun obtainEvent(viewEvent: AudioListEvent) {
     when (viewEvent) {
-      is ViewCreated -> when (viewEvent.audioListType) {
+      is ShowAudioList -> when (viewEvent.audioListType) {
         RECOMMENDATION -> showAudioRecommendationList()
         PROFILE -> showAudioProfileList(viewEvent.accountName)
         LOCAL -> {
         }
       }
+      is OnAudioLikeClick -> onAudioLikeClicked(viewEvent.model)
       is OnAudioClick -> onAudioClick(viewEvent.model)
     }
   }
