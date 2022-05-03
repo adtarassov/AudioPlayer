@@ -130,6 +130,7 @@
       android:maxLines="3"
       android:textColor="@color/main"
       android:textSize="14sp"
+      android:lineSpacingMultiplier="1.2"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="@id/user_avatar"
       app:layout_constraintTop_toBottomOf="@id/user_avatar"
