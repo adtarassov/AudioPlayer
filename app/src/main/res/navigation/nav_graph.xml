@@ -37,5 +37,11 @@
         app:argType="integer" />
   </dialog>
 
+  <fragment
+      android:id="@+id/voice_fragment"
+      android:name="com.adtarassov.audioplayer.ui.sreen.voice.VoiceFragment"
+      android:label="@string/create_fragment_lable"
+      tools:layout="@layout/fragment_voice" />
+
 
 </navigation>

@@ -8,7 +8,7 @@
 
   <item android:title="@string/menu_create"
       android:icon="@drawable/ic_baseline_add_circle_24"
-      android:id="@+id/recorde_audio_fragment"/>
+      android:id="@+id/voice_fragment"/>
 
   <item android:title="@string/menu_profile"
       android:icon="@drawable/ic_baseline_person_24"
