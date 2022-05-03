@@ -7,33 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import androidx.fragment.app.commitNow
-import androidx.fragment.app.findFragment
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.adtarassov.audioplayer.R
 import com.adtarassov.audioplayer.databinding.FragmentProfileBinding
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListFragment
 import com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationFragment
-import com.adtarassov.audioplayer.ui.sreen.player.fullscreen.FullScreenPlayerViewModel
 import com.adtarassov.audioplayer.utils.AudioListType
-import com.adtarassov.audioplayer.utils.AudioListType.Companion
-import com.adtarassov.audioplayer.utils.ProfileType
+import com.adtarassov.audioplayer.utils.ProfilePageType
+import com.adtarassov.audioplayer.utils.ProfilePageType.Companion.USER_ACCOUNT_NAME_KEY
+import com.adtarassov.audioplayer.utils.ProfilePageType.MAIN
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
   private var _binding: FragmentProfileBinding? = null
   private val binding get() = _binding!!
-  private lateinit var profileType: ProfileType
+  private lateinit var profilePageType: ProfilePageType
 
   private val viewModel: ProfileViewModel by viewModels()
 
@@ -42,7 +37,7 @@ class ProfileFragment : Fragment() {
     savedInstanceState: Bundle?,
   ): View {
     _binding = FragmentProfileBinding.inflate(inflater, container, false)
-    profileType = ProfileType.typeById(arguments?.getInt(ProfileType.BUNDLE_KEY) ?: ProfileType.MAIN.id)
+    profilePageType = ProfilePageType.typeById(arguments?.getInt(ProfilePageType.BUNDLE_KEY) ?: MAIN.id) // нужно для разного UI
     binding.authButton.setOnClickListener {
       openAuthFragment(AuthorizationFragment.Companion.AuthType.AUTHORIZATION)
     }
@@ -52,6 +47,7 @@ class ProfileFragment : Fragment() {
     binding.exitButton.setOnClickListener {
       viewModel.obtainEvent(ProfileEvent.OnExitButtonClicked)
     }
+    viewModel.obtainEvent(ProfileEvent.ViewCreate(profilePageType))
     return binding.root
   }
 
@@ -76,8 +72,11 @@ class ProfileFragment : Fragment() {
 
   }
 
-  private fun bindAudioListFragment() {
-    val bundle = bundleOf(AudioListType.BUNDLE_KEY to AudioListType.PROFILE.id)
+  private fun bindAudioListFragment(userAccountName: String) {
+    val bundle = bundleOf(
+      AudioListType.BUNDLE_KEY to AudioListType.PROFILE.id,
+      USER_ACCOUNT_NAME_KEY to userAccountName
+    )
     parentFragmentManager.commit {
       setReorderingAllowed(true)
       replace<AudioListFragment>(
@@ -132,7 +131,7 @@ class ProfileFragment : Fragment() {
 
         binding.usernameTv.text = state.user.username
         binding.usernameDescriptionTv.text = state.user.description
-        bindAudioListFragment()
+        bindAudioListFragment(state.user.username)
       }
     }
   }

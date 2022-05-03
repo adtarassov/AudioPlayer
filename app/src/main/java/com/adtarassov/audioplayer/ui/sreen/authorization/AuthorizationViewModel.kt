@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.adtarassov.audioplayer.data.UserRepository
 import com.adtarassov.audioplayer.data.SharedPreferences
 import com.adtarassov.audioplayer.ui.BaseFlowViewModel
+import com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationAction.RegistrationSuccess
 import com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationEvent.OnLoginButtonClicked
 import com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationFragment.Companion.AuthType.AUTHORIZATION
 import com.adtarassov.audioplayer.ui.sreen.authorization.AuthorizationFragment.Companion.AuthType.REGISTRATION
@@ -31,6 +32,7 @@ class AuthorizationViewModel @Inject constructor(
       if (response.isSuccessful && tokenAccess != null) {
         viewAction = AuthorizationAction.AuthorizationSuccess
         sharedPreferences.setToken(tokenAccess)
+        sharedPreferences.setAccountName(username)
       } else {
         viewState = AuthorizationViewState.Error("Ошибка авторизации")
       }
@@ -42,6 +44,7 @@ class AuthorizationViewModel @Inject constructor(
       viewState = AuthorizationViewState.Loading
       val response = userRepository.registerUser(username, password)
       if (response.isSuccessful) {
+        viewAction = RegistrationSuccess
         authorizeUser(username, password)
       } else {
         viewState = AuthorizationViewState.Error("Ошибка регистрации")

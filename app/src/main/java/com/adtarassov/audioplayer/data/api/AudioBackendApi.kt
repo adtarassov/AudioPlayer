@@ -6,6 +6,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AudioBackendApi {
 
@@ -22,7 +23,7 @@ interface AudioBackendApi {
 
   @Headers("Accept: application/json")
   @FormUrlEncoded
-  @POST("users/")
+  @POST("api/users/")
   suspend fun postRegisterUser(
     @Field("username")
     username: String,
@@ -33,6 +34,12 @@ interface AudioBackendApi {
 
   @GET("api/audio/recommendation")
   suspend fun getAudioRecommendation(): Response<List<AudioResponseModel>>
+
+  @GET("/api/{account_name}/audio")
+  suspend fun getAudioProfile(
+    @Path("account_name")
+    accountName: String
+  ): Response<List<AudioResponseModel>>
 
   companion object {
     const val BASE_URL = "http://185.233.82.123:8000/"

@@ -3,12 +3,14 @@ package com.adtarassov.audioplayer.ui.sreen.audiolist
 import androidx.lifecycle.viewModelScope
 import com.adtarassov.audioplayer.data.AudioListRepository
 import com.adtarassov.audioplayer.data.AudioModel
+import com.adtarassov.audioplayer.data.SharedPreferences
 import com.adtarassov.audioplayer.ui.BaseFlowViewModel
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioClick
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.ViewCreated
 import com.adtarassov.audioplayer.utils.AudioListType.LOCAL
 import com.adtarassov.audioplayer.utils.AudioListType.PROFILE
 import com.adtarassov.audioplayer.utils.AudioListType.RECOMMENDATION
+import com.adtarassov.audioplayer.utils.ProfilePageType
 import com.adtarassov.audioplayer.utils.player.AudioManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -18,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AudioListViewModel @Inject constructor(
   private val repository: AudioListRepository,
-  private val audioManager: AudioManager,
+  private val audioManager: AudioManager
 ) : BaseFlowViewModel<AudioListViewState, AudioListAction, AudioListEvent>() {
 
   private val handler = CoroutineExceptionHandler { _, exception ->
@@ -37,19 +39,19 @@ class AudioListViewModel @Inject constructor(
       viewState = if (audioList.isNotEmpty()) {
         AudioListViewState.AudioLoaded(audioList)
       } else {
-        AudioListViewState.AudioLoadFailure("Ошибка")
+        AudioListViewState.AudioLoadFailure("Список аудиозаписей рекомендаций пуст.")
       }
     }
   }
 
-  private fun showAudioProfileList() {
+  private fun showAudioProfileList(accountName: String) {
     viewState = AudioListViewState.Loading
     viewModelScope.launch(handler) {
-      val audioList = repository.getLocalAudio()
+      val audioList = repository.getAudioProfileList(accountName)
       viewState = if (audioList.isNotEmpty()) {
         AudioListViewState.AudioLoaded(audioList)
       } else {
-        AudioListViewState.AudioLoadFailure("Ошибка")
+        AudioListViewState.AudioLoadFailure("Список аудиозаписей профиля пуст.")
       }
     }
   }
@@ -58,7 +60,7 @@ class AudioListViewModel @Inject constructor(
     when (viewEvent) {
       is ViewCreated -> when (viewEvent.audioListType) {
         RECOMMENDATION -> showAudioRecommendationList()
-        PROFILE -> showAudioProfileList()
+        PROFILE -> showAudioProfileList(viewEvent.accountName)
         LOCAL -> {
         }
       }

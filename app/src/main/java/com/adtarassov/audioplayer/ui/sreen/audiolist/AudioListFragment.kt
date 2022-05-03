@@ -14,6 +14,7 @@ import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoa
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoaded
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.Loading
 import com.adtarassov.audioplayer.utils.AudioListType
+import com.adtarassov.audioplayer.utils.ProfilePageType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
@@ -27,6 +28,8 @@ class AudioListFragment : Fragment() {
   }
 
   private lateinit var audioListType: AudioListType
+  private lateinit var profilePageType: ProfilePageType
+  private lateinit var accountName: String
 
   private var _binding: FragmentAudioListBinding? = null
   private val binding get() = _binding!!
@@ -37,6 +40,8 @@ class AudioListFragment : Fragment() {
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
     audioListType = AudioListType.typeById(arguments?.getInt(AudioListType.BUNDLE_KEY) ?: AudioListType.RECOMMENDATION.id)
+    profilePageType = ProfilePageType.typeById(arguments?.getInt(ProfilePageType.BUNDLE_KEY) ?: ProfilePageType.MAIN.id)
+    accountName = arguments?.getString(ProfilePageType.USER_ACCOUNT_NAME_KEY) ?: ""
     return binding.root
   }
 
@@ -51,7 +56,7 @@ class AudioListFragment : Fragment() {
     lifecycleScope.launchWhenCreated {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
-    viewModel.obtainEvent(AudioListEvent.ViewCreated(audioListType))
+    viewModel.obtainEvent(AudioListEvent.ViewCreated(audioListType, accountName))
   }
 
   private fun bindViewState(state: AudioListViewState) {

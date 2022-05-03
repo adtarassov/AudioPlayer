@@ -1,9 +1,13 @@
 package com.adtarassov.audioplayer.ui.sreen.authorization
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
+
 
 @AndroidEntryPoint
 class AuthorizationFragment : BottomSheetDialogFragment() {
@@ -69,6 +74,9 @@ class AuthorizationFragment : BottomSheetDialogFragment() {
       is AuthorizationViewState.Loading -> {
         binding.authView.setInvisible()
         binding.progressView.isVisible = true
+        val imm = getSystemService(requireContext(), InputMethodManager::class.java)
+        imm?.hideSoftInputFromWindow(binding.passwordEt.windowToken, 0)
+        imm?.hideSoftInputFromWindow(binding.usernameEt.windowToken, 0)
       }
       is AuthorizationViewState.Error -> {
         binding.authView.isVisible = true
@@ -83,6 +91,9 @@ class AuthorizationFragment : BottomSheetDialogFragment() {
     when (action) {
       is AuthorizationAction.AuthorizationSuccess -> {
         dismiss()
+      }
+      is AuthorizationAction.RegistrationSuccess -> {
+        Toast.makeText(requireContext(), "Регистрация прошла успешно", Toast.LENGTH_SHORT).show()
       }
     }
   }

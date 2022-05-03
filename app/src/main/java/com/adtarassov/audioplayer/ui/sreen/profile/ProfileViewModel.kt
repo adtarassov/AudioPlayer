@@ -2,6 +2,7 @@ package com.adtarassov.audioplayer.ui.sreen.profile
 
 import androidx.lifecycle.viewModelScope
 import com.adtarassov.audioplayer.data.SharedPreferences
+import com.adtarassov.audioplayer.data.SharedPreferences.Companion.UserAuthModel
 import com.adtarassov.audioplayer.data.api.UserModel
 import com.adtarassov.audioplayer.ui.BaseFlowViewModel
 import com.adtarassov.audioplayer.ui.sreen.profile.ProfileEvent.OnExitButtonClicked
@@ -21,26 +22,27 @@ class ProfileViewModel @Inject constructor(
 
   init {
     viewModelScope.launch {
-      preferences.userTokenFlow.collect { userToken ->
-        if (userToken == null) {
+      preferences.userAuthModelFlow.collect { userAuthModel ->
+        if (userAuthModel.token == null || userAuthModel.accountName == null) {
           viewState = Unauthorized
         } else {
-          getUserData()
+          getUserData(userAuthModel.accountName)
         }
       }
     }
   }
 
-  private suspend fun getUserData() {
+  private suspend fun getUserData(accountName: String) {
     viewState = Loading
     delay(1000)
-    viewState = Loaded(UserModel("adtarassov", "Лучший профиль\nЛюблю прогать\nЛюблю кодить"))
+    viewState = Loaded(UserModel(accountName, "Лучший профиль\nЛюблю прогать\nЛюблю кодить"))
   }
 
   override fun obtainEvent(viewEvent: ProfileEvent) {
     when (viewEvent) {
       is OnExitButtonClicked -> {
         preferences.setToken(null)
+        preferences.setAccountName(null)
       }
     }
   }

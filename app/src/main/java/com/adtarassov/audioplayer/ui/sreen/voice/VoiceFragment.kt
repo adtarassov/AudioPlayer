@@ -7,13 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.adtarassov.audioplayer.R
-import com.adtarassov.audioplayer.databinding.FragmentProfileBinding
 import com.adtarassov.audioplayer.databinding.FragmentVoiceBinding
-import com.adtarassov.audioplayer.ui.sreen.profile.ProfileAction
-import com.adtarassov.audioplayer.ui.sreen.profile.ProfileViewModel
-import com.adtarassov.audioplayer.ui.sreen.profile.ProfileViewState
-import com.adtarassov.audioplayer.utils.ProfileType
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 

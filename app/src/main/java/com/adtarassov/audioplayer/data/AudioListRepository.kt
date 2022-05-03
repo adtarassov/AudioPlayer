@@ -32,6 +32,20 @@ class AudioListRepository @Inject constructor(
     }
   }
 
+  suspend fun getAudioProfileList(accountName: String): List<AudioModel> {
+    val response = audioBackendApi.getAudioProfile(accountName)
+    val audioResponseModelList = response.body() ?: emptyList()
+    return audioResponseModelList.map {
+      AudioModel(
+        author = it.accountName,
+        title = it.name,
+        subtitle = it.description,
+        durationMs = 10000,
+        filePath = it.audioUrl
+      )
+    }
+  }
+
   @Deprecated("AudioListRepository::getLocalAudio deprecated")
   suspend fun getLocalAudio(): ArrayList<AudioModel> {
     delay(1000)

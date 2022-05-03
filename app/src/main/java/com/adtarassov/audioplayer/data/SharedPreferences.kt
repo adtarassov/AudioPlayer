@@ -3,7 +3,6 @@ package com.adtarassov.audioplayer.data
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.adtarassov.audioplayer.di.ApplicationScope
-import com.adtarassov.audioplayer.utils.player.AudioService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,12 +16,14 @@ class SharedPreferences @Inject constructor(
   @ApplicationContext
   context: Context,
   @ApplicationScope
-  private val externalScope: CoroutineScope
+  private val externalScope: CoroutineScope,
 ) {
   private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-  private val userToken: MutableStateFlow<String?> = MutableStateFlow(getToken())
-  val userTokenFlow: StateFlow<String?> = userToken
+  private val userAuthModel: MutableStateFlow<UserAuthModel> = MutableStateFlow(
+    UserAuthModel(getToken(), getAccountName())
+  )
+  val userAuthModelFlow: StateFlow<UserAuthModel> = userAuthModel
 
   fun setToken(token: String?) {
     prefs.edit()
@@ -30,14 +31,35 @@ class SharedPreferences @Inject constructor(
       .apply()
 
     externalScope.launch {
-      userToken.emit(token)
+      val newModel = userAuthModelFlow.value.copy(token = token)
+      userAuthModel.emit(newModel)
+    }
+  }
+
+  fun setAccountName(name: String?) {
+    prefs.edit()
+      .putString(ACCOUNT_NAME_KEY, name)
+      .apply()
+
+    externalScope.launch {
+      val newModel = userAuthModelFlow.value.copy(accountName = name)
+      userAuthModel.emit(newModel)
     }
   }
 
   private fun getToken() = prefs.getString(TOKEN_KEY, null)
 
+  private fun getAccountName() = prefs.getString(ACCOUNT_NAME_KEY, null)
+
+
   companion object {
     private const val TOKEN_KEY = "token_key"
+    private const val ACCOUNT_NAME_KEY = "account_name_key"
+
+    data class UserAuthModel(
+      val token: String?,
+      val accountName: String?,
+    )
   }
 
 }
