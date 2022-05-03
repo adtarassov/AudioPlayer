@@ -40,7 +40,7 @@ class FullScreenPlayerViewModel @Inject constructor(
               val timeToEndMs = currentAudio.durationMs - model.currentPositionMs
               viewState = HasTrack(
                 currentAudio.title,
-                currentAudio.artist ?: "",
+                currentAudio.subtitle ?: "",
                 model.isPlaying,
                 audioProgress,
                 timeToEndMs

@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.os.Environment
 import android.util.Log
+import com.adtarassov.audioplayer.data.api.AudioBackendApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -11,17 +12,29 @@ import javax.inject.Singleton
 
 
 @Singleton
-class AudioListHelper @Inject constructor(
+class AudioListRepository @Inject constructor(
   @ApplicationContext
   private val context: Context,
+  private val audioBackendApi: AudioBackendApi,
 ) {
 
-  suspend fun getAllAudioList(): List<AudioModel> {
-    delay(1000)
-    return getAllLocalAudio()
+  suspend fun getAudioRecommendationList(): List<AudioModel> {
+    val response = audioBackendApi.getAudioRecommendation()
+    val audioResponseModelList = response.body() ?: emptyList()
+    return audioResponseModelList.map {
+      AudioModel(
+        author = it.accountName,
+        title = it.name,
+        subtitle = it.description,
+        durationMs = 10000,
+        filePath = it.audioUrl
+      )
+    }
   }
 
-  private fun getAllLocalAudio(): ArrayList<AudioModel> {
+  @Deprecated("AudioListRepository::getLocalAudio deprecated")
+  suspend fun getLocalAudio(): ArrayList<AudioModel> {
+    delay(1000)
     val audioList = ArrayList<AudioModel>()
     val musicFolder = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
     val mediaMetadataRetriever = MediaMetadataRetriever()
@@ -30,18 +43,17 @@ class AudioListHelper @Inject constructor(
         val path = file.path
         mediaMetadataRetriever.setDataSource(path)
         val title = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-        val artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+        val artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: ""
         val duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
-        val album = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
         if (title == null || duration == null) {
-          Log.e(AudioListHelper::class.java.simpleName, "title-$title or duration-$duration is null")
+          Log.e(AudioListRepository::class.java.simpleName, "title-$title or duration-$duration is null")
         } else {
           audioList.add(
             AudioModel(
+              author = artist,
               title = title,
-              artist = artist,
+              subtitle = null,
               durationMs = duration,
-              album = album,
               filePath = path
             )
           )

@@ -5,21 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.adtarassov.audioplayer.R
 import com.adtarassov.audioplayer.databinding.FragmentAudioListBinding
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoadFailure
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoaded
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.Loading
 import com.adtarassov.audioplayer.utils.AudioListType
-import com.adtarassov.audioplayer.utils.AudioListType.Companion
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
@@ -42,7 +36,7 @@ class AudioListFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     _binding = FragmentAudioListBinding.inflate(inflater, container, false)
-    audioListType = AudioListType.typeById(arguments?.getInt(AudioListType.BUNDLE_KEY) ?: AudioListType.All.id)
+    audioListType = AudioListType.typeById(arguments?.getInt(AudioListType.BUNDLE_KEY) ?: AudioListType.RECOMMENDATION.id)
     return binding.root
   }
 
@@ -57,7 +51,7 @@ class AudioListFragment : Fragment() {
     lifecycleScope.launchWhenCreated {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
-    viewModel.obtainEvent(AudioListEvent.ViewCreated)
+    viewModel.obtainEvent(AudioListEvent.ViewCreated(audioListType))
   }
 
   private fun bindViewState(state: AudioListViewState) {

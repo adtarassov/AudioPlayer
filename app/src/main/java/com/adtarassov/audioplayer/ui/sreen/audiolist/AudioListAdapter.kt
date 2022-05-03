@@ -40,7 +40,7 @@ class AudioListAdapter(
       }
       binding.apply {
         title.text = model.title
-        subtitle.text = model.artist
+        subtitle.text = model.subtitle
       }
     }
   }

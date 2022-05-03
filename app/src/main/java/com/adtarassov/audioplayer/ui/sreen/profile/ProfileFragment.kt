@@ -77,7 +77,7 @@ class ProfileFragment : Fragment() {
   }
 
   private fun bindAudioListFragment() {
-    val bundle = bundleOf(AudioListType.BUNDLE_KEY to AudioListType.LOCAL.id)
+    val bundle = bundleOf(AudioListType.BUNDLE_KEY to AudioListType.PROFILE.id)
     parentFragmentManager.commit {
       setReorderingAllowed(true)
       replace<AudioListFragment>(

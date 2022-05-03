@@ -37,7 +37,7 @@ class SmallPlayerViewModel @Inject constructor(
             viewState = if (currentAudio == null) {
               UnActivePayer
             } else {
-              HasTrack(currentAudio.title, currentAudio.artist ?: "", model.isPlaying)
+              HasTrack(currentAudio.title, currentAudio.subtitle ?: "", model.isPlaying)
             }
           }
       }
