@@ -1,11 +1,10 @@
 package com.adtarassov.audioplayer.ui.sreen.audiolist
 
 import androidx.lifecycle.viewModelScope
-import com.adtarassov.audioplayer.data.AudioListRepository
+import com.adtarassov.audioplayer.data.AudioRepository
 import com.adtarassov.audioplayer.data.AudioModel
 import com.adtarassov.audioplayer.ui.BaseFlowViewModel
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAction.Empty
-import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAction.ProfileNavigate
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioClick
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioLikeClick
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.ShowAudioList
@@ -15,13 +14,12 @@ import com.adtarassov.audioplayer.utils.AudioListType.RECOMMENDATION
 import com.adtarassov.audioplayer.utils.player.AudioManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AudioListViewModel @Inject constructor(
-  private val repository: AudioListRepository,
+  private val repository: AudioRepository,
   private val audioManager: AudioManager,
 ) : BaseFlowViewModel<AudioListViewState, AudioListAction, AudioListEvent>() {
 

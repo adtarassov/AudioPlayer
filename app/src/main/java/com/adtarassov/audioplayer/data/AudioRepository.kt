@@ -7,12 +7,16 @@ import android.util.Log
 import com.adtarassov.audioplayer.data.api.AudioBackendApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
+import okhttp3.MultipartBody.Part
+import okhttp3.RequestBody
+import retrofit2.http.Field
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class AudioListRepository @Inject constructor(
+class AudioRepository @Inject constructor(
   @ApplicationContext
   private val context: Context,
   private val audioBackendApi: AudioBackendApi,
@@ -32,6 +36,13 @@ class AudioListRepository @Inject constructor(
       )
     }
   }
+
+  suspend fun uploadAudioFile(
+    token: String,
+    audioName: RequestBody,
+    audioDescription: RequestBody,
+    file: Part?,
+  ) = audioBackendApi.uploadAudioFile(token, audioName, audioDescription, file)
 
   suspend fun setLikeAudio(audioModel: AudioModel): Boolean {
     delay(1000)
@@ -68,7 +79,7 @@ class AudioListRepository @Inject constructor(
         val artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: ""
         val duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
         if (title == null || duration == null) {
-          Log.e(AudioListRepository::class.java.simpleName, "title-$title or duration-$duration is null")
+          Log.e(AudioRepository::class.java.simpleName, "title-$title or duration-$duration is null")
         } else {
           audioList.add(
             AudioModel(
@@ -84,5 +95,28 @@ class AudioListRepository @Inject constructor(
       }
     }
     return audioList
+  }
+
+  fun audioFromFilePath(currentAudioPath: String, author: String, title: String, subtitle: String): AudioModel? {
+    val mediaMetadataRetriever = MediaMetadataRetriever()
+    val file = File(currentAudioPath)
+    if (file.extension == "mp3") {
+      val path = file.path
+      mediaMetadataRetriever.setDataSource(path)
+      val duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
+      if (duration == null) {
+        Log.e(AudioRepository::class.java.simpleName, "title-$title or duration-$duration is null")
+      } else {
+        return AudioModel(
+          author = author,
+          title = title,
+          subtitle = subtitle,
+          durationMs = duration,
+          filePath = path,
+          isLiked = false
+        )
+      }
+    }
+    return null
   }
 }
