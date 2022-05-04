@@ -24,11 +24,13 @@ class RecordingManager @Inject constructor(
     stopRecording()
     if (VERSION.SDK_INT >= VERSION_CODES.S) {
       recorder = MediaRecorder(context).apply {
-        setAudioSource(MediaRecorder.AudioSource.MIC)
-        setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
         setOutputFile(fileName)
-        setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
+        setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
+        setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+        setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC)
+        setAudioEncodingBitRate(16 * 44100)
+        setAudioSamplingRate(44100)
+        setAudioChannels(2)
         try {
           prepare()
         } catch (e: IOException) {
@@ -39,11 +41,13 @@ class RecordingManager @Inject constructor(
       }
     } else {
       recorder = MediaRecorder().apply {
-        setAudioSource(MediaRecorder.AudioSource.MIC)
-        setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
         setOutputFile(fileName)
-        setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
+        setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
+        setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+        setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC)
+        setAudioEncodingBitRate(16 * 44100)
+        setAudioSamplingRate(44100)
+        setAudioChannels(2)
         try {
           prepare()
         } catch (e: IOException) {

@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,6 +43,9 @@ class VoiceFragment : Fragment() {
   ): View {
     _binding = FragmentVoiceBinding.inflate(inflater, container, false)
     setOnRecordButtonTouch()
+    binding.actionSecondaryButton.setOnClickListener {
+      viewModel.obtainEvent(VoiceEvent.RefreshRecording)
+    }
     viewModel.obtainEvent(VoiceEvent.RefreshRecording)
     return binding.root
   }
@@ -59,24 +64,34 @@ class VoiceFragment : Fragment() {
   }
 
   private fun startRecordEvent() {
-//    if (!audioRecordingPermissionGranted) {
-//      ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION)
-//      return
-//    }
+    if (!getPermissionAndShowIfNeeded(true)) {
+      return
+    }
     val uuid: String = UUID.randomUUID().toString()
     val dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC)
     val fileName = "$dir/$uuid.mp3"
-    viewModel.obtainEvent(VoiceEvent.RecordStart(fileName = fileName))
+    val title = binding.recordName.text.toString()
+    val subtitle = binding.recordDescription.text.toString()
+    viewModel.obtainEvent(VoiceEvent.RecordStart(fileName = fileName, title = title, subtitle = subtitle))
   }
 
   private fun endRecordEvent() {
-//    if (!audioRecordingPermissionGranted) {
-//      ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION)
-//      return
-//    }
+    if (!getPermissionAndShowIfNeeded(false)) {
+      return
+    }
     val title = binding.recordName.text.toString()
     val subtitle = binding.recordDescription.text.toString()
     viewModel.obtainEvent(VoiceEvent.RecordEnd(title, subtitle))
+  }
+
+  private fun getPermissionAndShowIfNeeded(needed: Boolean): Boolean {
+    val havePermission =
+      ActivityCompat.checkSelfPermission(requireContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED
+    if (needed && !havePermission) {
+      ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+      Toast.makeText(requireContext(), "Требуется разрешение на запись", Toast.LENGTH_SHORT).show()
+    }
+    return havePermission
   }
 
   override fun onRequestPermissionsResult(
@@ -102,8 +117,16 @@ class VoiceFragment : Fragment() {
   }
 
   private fun bindViewAction(action: VoiceAction) {
+    when (action) {
+      is VoiceAction.Empty -> {
 
+      }
+      is VoiceAction.Message -> {
+        Toast.makeText(requireContext(), action.message, Toast.LENGTH_SHORT).show()
+      }
+    }
   }
+
 
   private fun bindViewState(state: VoiceViewState) {
     when (state) {
@@ -112,14 +135,14 @@ class VoiceFragment : Fragment() {
         binding.recordButton.progress = 0f
         binding.recordButton.pauseAnimation()
         binding.actionButton.setInvisible()
+        binding.actionSecondaryButton.isVisible = false
         enableButtonsEditting(true)
-        binding.recordName.setText("")
-        binding.recordDescription.setText("")
       }
       is VoiceViewState.RECORD -> {
         canMakeRecord = true
         binding.recordButton.playAnimation()
         binding.actionButton.setInvisible()
+        binding.actionSecondaryButton.isVisible = false
         enableButtonsEditting(false)
       }
       is VoiceViewState.RECORDING_FINISH -> {
@@ -128,11 +151,10 @@ class VoiceFragment : Fragment() {
         binding.recordButton.progress = 0f
         binding.actionButton.isClickable = true
         binding.actionButton.setVisible()
+        binding.actionSecondaryButton.isVisible = true
         binding.actionButton.text = "Отправить"
         binding.actionButton.setOnClickListener {
-          viewModel.obtainEvent(VoiceEvent.OnSendButtonClick)
-          binding.recordName.isClickable = true
-          binding.recordButton.isClickable = true
+          onActionButtonClick()
         }
         enableButtonsEditting(true)
       }
@@ -140,6 +162,7 @@ class VoiceFragment : Fragment() {
         canMakeRecord = false
         binding.actionButton.isClickable = false
         binding.actionButton.setVisible()
+        binding.actionSecondaryButton.isVisible = false
         binding.actionButton.text = "Отправка"
         enableButtonsEditting(false)
       }
@@ -148,12 +171,19 @@ class VoiceFragment : Fragment() {
         binding.actionButton.setVisible()
         binding.actionButton.text = "Записать новое аудио"
         binding.actionButton.isClickable = true
+        binding.actionSecondaryButton.isVisible = false
         binding.actionButton.setOnClickListener {
           viewModel.obtainEvent(VoiceEvent.RefreshRecording)
         }
         enableButtonsEditting(false)
       }
     }
+  }
+
+  private fun onActionButtonClick() {
+    val title = binding.recordName.text.toString()
+    val subtitle = binding.recordDescription.text.toString()
+    viewModel.obtainEvent(VoiceEvent.OnSendButtonClick(title, subtitle))
   }
 
   override fun onDestroyView() {

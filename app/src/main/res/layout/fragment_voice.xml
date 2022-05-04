@@ -46,7 +46,7 @@
       android:layout_marginTop="32dp"
       android:backgroundTint="@color/item_background"
       android:hint="Описание"
-      android:inputType="text"
+      android:inputType="textMultiLine"
       android:textColor="@color/main"
       android:textColorHint="@color/minor"
       app:layout_constraintBottom_toTopOf="@id/record_button"
@@ -60,7 +60,7 @@
       android:layout_width="128dp"
       android:layout_height="128dp"
       android:layout_marginTop="32dp"
-      app:layout_constraintBottom_toTopOf="@id/action_button"
+      app:layout_constraintBottom_toTopOf="@id/action_secondary_button"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/record_description"
@@ -69,6 +69,20 @@
       app:lottie_rawRes="@raw/lottie_record_anim"
       />
 
+
+  <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/action_secondary_button"
+      style="@style/MainButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="16dp"
+      android:layout_marginBottom="16dp"
+      android:layout_weight="1"
+      android:text="Очистить"
+      app:layout_constraintBottom_toTopOf="@id/action_button"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      />
 
   <androidx.appcompat.widget.AppCompatButton
       android:id="@+id/action_button"
