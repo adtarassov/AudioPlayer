@@ -5,13 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
     >
 
   <com.airbnb.lottie.LottieAnimationView
       android:id="@+id/image_album"
       android:layout_width="264dp"
       android:layout_height="216dp"
-      android:layout_marginTop="16dp"
       app:layout_constraintBottom_toTopOf="@id/title"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +26,11 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
+      android:ellipsize="end"
+      android:maxLines="1"
       android:textColor="@color/main"
       android:textSize="18sp"
+
       app:layout_constraintBottom_toTopOf="@id/subtitle"
       app:layout_constraintEnd_toEndOf="@id/image_album"
       app:layout_constraintStart_toStartOf="@id/image_album"
@@ -40,6 +43,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="4dp"
+      android:ellipsize="end"
+      android:maxLines="5"
       android:textColor="@color/minor"
       android:textSize="13sp"
       app:layout_constraintBottom_toTopOf="@id/audio_progress_seek"
@@ -54,13 +59,13 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
+      android:progressBackgroundTint="@color/minor"
+      android:progressTint="@color/main"
+      android:thumbTint="@color/main"
       app:layout_constraintBottom_toTopOf="@id/button_play"
       app:layout_constraintEnd_toEndOf="@id/image_album"
       app:layout_constraintStart_toStartOf="@id/image_album"
       app:layout_constraintTop_toBottomOf="@id/subtitle"
-      android:progressTint="@color/main"
-      android:thumbTint="@color/main"
-      android:progressBackgroundTint="@color/minor"
       tools:progress="50"
       />
 

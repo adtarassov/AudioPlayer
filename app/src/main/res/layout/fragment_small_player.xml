@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_small_screen_player"
@@ -9,27 +10,37 @@
 
   <TextView
       android:id="@+id/title"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginTop="4dp"
+      android:layout_marginEnd="8dp"
+      android:ellipsize="end"
+      android:maxLines="1"
       android:textColor="@color/main"
       android:textSize="21sp"
+      app:layout_constraintBottom_toTopOf="@id/subtitle"
+      app:layout_constraintEnd_toStartOf="@id/button_play"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      tools:text="Tiiiiiitle"
       />
 
   <TextView
       android:id="@+id/subtitle"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="4dp"
       android:layout_marginBottom="4dp"
+      android:ellipsize="end"
+      android:maxLines="1"
       android:textColor="@color/minor"
       android:textSize="13sp"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="@id/title"
       app:layout_constraintStart_toStartOf="@id/title"
       app:layout_constraintTop_toBottomOf="@id/title"
+      tools:text="Suuuuuubtitle"
       />
 
   <ImageView
