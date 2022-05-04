@@ -5,6 +5,6 @@ data class AudioModel(
   val title: String,
   val subtitle: String?,
   val durationMs: Long,
-  val isLiked: Boolean,
+  var isLiked: Boolean,
   val filePath: String
 )

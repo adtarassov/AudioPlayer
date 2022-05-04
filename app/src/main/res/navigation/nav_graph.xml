@@ -14,6 +14,9 @@
         android:name="audio_list_type"
         android:defaultValue="0"
         app:argType="integer" />
+    <action
+        android:id="@+id/action_audio_list_fragment_to_profile_fragment"
+        app:destination="@id/profile_fragment" />
   </fragment>
 
   <fragment

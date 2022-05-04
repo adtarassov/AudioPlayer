@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adtarassov.audioplayer.databinding.FragmentAudioListBinding
+import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAction.Empty
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoadFailure
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoaded
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.Loading
+import com.adtarassov.audioplayer.ui.sreen.profile.ProfileFragmentDirections
 import com.adtarassov.audioplayer.utils.AudioListType
 import com.adtarassov.audioplayer.utils.ProfilePageType
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,7 +87,15 @@ class AudioListFragment : Fragment() {
   }
 
   private fun bindViewAction(action: AudioListAction) {
+    when (action) {
+      is AudioListAction.ProfileNavigate -> {
+        val navAction = AudioListFragmentDirections.actionAudioListFragmentToProfileFragment()
+        findNavController().navigate(navAction)
+      }
+      is Empty -> {
 
+      }
+    }
   }
 
 }

@@ -30,7 +30,7 @@ class AudioListAdapter(
   fun refreshAudioList(list: List<AudioModel>) {
     audioList.clear()
     audioList.addAll(list)
-    notifyItemChanged(0, list.size)
+    notifyDataSetChanged()
   }
 
   class AudioViewHolder(
@@ -51,11 +51,15 @@ class AudioListAdapter(
         }
         val minutes = model.durationMs / 1000 / 60
         val seconds = model.durationMs / 1000 % 60
-        val likeImageDrawable = AppCompatResources.getDrawable(binding.root.context, R.drawable.ic_heart)
-        if (!model.isLiked) {
+        if (model.isLiked) {
+          val likeImageDrawable = AppCompatResources.getDrawable(binding.root.context, R.drawable.ic_heart)
+          likeImageDrawable?.setTint(binding.root.context.getColor(R.color.red))
+          likeImage.setImageDrawable(likeImageDrawable)
+        } else {
+          val likeImageDrawable = AppCompatResources.getDrawable(binding.root.context, R.drawable.ic_heart)
           likeImageDrawable?.setTint(binding.root.context.getColor(R.color.minorDisable))
+          likeImage.setImageDrawable(likeImageDrawable)
         }
-        likeImage.setImageDrawable(likeImageDrawable)
         audioDuration.text = "${"%02d".format(minutes)}:${"%02d".format(seconds)}"
       }
     }
