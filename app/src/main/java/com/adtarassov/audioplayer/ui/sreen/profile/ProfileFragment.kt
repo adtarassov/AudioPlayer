@@ -24,11 +24,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+open class ProfileFragment : Fragment() {
 
   private var _binding: FragmentProfileBinding? = null
   private val binding get() = _binding!!
   private lateinit var profilePageType: ProfilePageType
+  private lateinit var accountName: String
 
   private val viewModel: ProfileViewModel by viewModels()
 
@@ -38,6 +39,7 @@ class ProfileFragment : Fragment() {
   ): View {
     _binding = FragmentProfileBinding.inflate(inflater, container, false)
     profilePageType = ProfilePageType.typeById(arguments?.getInt(ProfilePageType.BUNDLE_KEY) ?: MAIN.id) // нужно для разного UI
+    accountName = arguments?.getString(USER_ACCOUNT_NAME_KEY) ?: ""
     binding.authButton.setOnClickListener {
       openAuthFragment(AuthorizationFragment.Companion.AuthType.AUTHORIZATION)
     }
@@ -47,7 +49,7 @@ class ProfileFragment : Fragment() {
     binding.exitButton.setOnClickListener {
       viewModel.obtainEvent(ProfileEvent.OnExitButtonClicked)
     }
-    viewModel.obtainEvent(ProfileEvent.ViewCreate(profilePageType))
+    viewModel.obtainEvent(ProfileEvent.ViewCreate(profilePageType, accountName))
     return binding.root
   }
 
@@ -95,13 +97,7 @@ class ProfileFragment : Fragment() {
         binding.authorizationView.isVisible = true
         binding.progressView.isVisible = false
 
-        val prevFragment = parentFragmentManager.findFragmentByTag(USER_AUDIO_LIST_FRAGMENT_TAG)
-        binding.audioListFragmentContainer.isVisible = false
-        prevFragment?.let {
-          parentFragmentManager.commit {
-            remove(it)
-          }
-        }
+        clearFragmentContainer()
         binding.dividerView.isVisible = false
         binding.userAvatar.isVisible = false
         binding.usernameTv.isVisible = false
@@ -127,11 +123,26 @@ class ProfileFragment : Fragment() {
         binding.dividerView.isVisible = true
         binding.usernameTv.isVisible = true
         binding.usernameDescriptionTv.isVisible = true
-        binding.exitButton.isVisible = true
+        binding.exitButton.isVisible = profilePageType == MAIN
 
         binding.usernameTv.text = state.user.username
         binding.usernameDescriptionTv.text = state.user.description
         bindAudioListFragment(state.user.username)
+      }
+    }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    clearFragmentContainer()
+  }
+
+  private fun clearFragmentContainer() {
+    val prevFragment = parentFragmentManager.findFragmentByTag(USER_AUDIO_LIST_FRAGMENT_TAG)
+    binding.audioListFragmentContainer.isVisible = false
+    prevFragment?.let {
+      parentFragmentManager.commit {
+        remove(it)
       }
     }
   }

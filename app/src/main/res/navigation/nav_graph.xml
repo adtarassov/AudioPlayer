@@ -15,15 +15,15 @@
         android:defaultValue="0"
         app:argType="integer" />
     <action
-        android:id="@+id/action_audio_list_fragment_to_profile_fragment"
-        app:destination="@id/profile_fragment" />
+        android:id="@+id/action_audio_list_fragment_to_fragmentHolder"
+        app:destination="@id/fragment_holder" />
   </fragment>
 
   <fragment
       android:id="@+id/profile_fragment"
       android:name="com.adtarassov.audioplayer.ui.sreen.profile.ProfileFragment"
       android:label="@string/menu_profile"
-      tools:layout="@layout/fragment_profile" >
+      tools:layout="@layout/fragment_profile">
     <action
         android:id="@+id/action_profile_fragment_to_authorizationFragment"
         app:destination="@id/authorization_fragment" />
@@ -43,8 +43,27 @@
   <fragment
       android:id="@+id/voice_fragment"
       android:name="com.adtarassov.audioplayer.ui.sreen.voice.VoiceFragment"
-      android:label="@string/create_fragment_lable"
+      android:label="@string/create_fragment_label"
       tools:layout="@layout/fragment_voice" />
+
+  <fragment
+      android:id="@+id/fragment_holder"
+      android:name="com.adtarassov.audioplayer.ui.sreen.profile.FragmentHolder"
+      android:label="@string/holder_fragment_label"
+      tools:layout="@layout/fragment_profile" >
+    <argument
+        android:name="audio_list_type"
+        android:defaultValue="1"
+        app:argType="integer" />
+    <argument
+        android:name="profile_type"
+        android:defaultValue="1"
+        app:argType="integer" />
+    <argument
+        android:name="user_account_name_key"
+        android:defaultValue=""
+        app:argType="string" />
+  </fragment>
 
 
 </navigation>

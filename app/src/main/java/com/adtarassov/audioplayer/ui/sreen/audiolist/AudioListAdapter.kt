@@ -12,13 +12,14 @@ import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAdapter.AudioViewH
 class AudioListAdapter(
   private val onAudioClickListener: (AudioModel) -> Unit,
   private val onAudioLikeClickListener: (AudioModel) -> Unit,
+  private val onAudioProfileClick: (AudioModel) -> Unit,
 ) : RecyclerView.Adapter<AudioViewHolder>() {
 
   private var audioList = ArrayList<AudioModel>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AudioViewHolder {
     val binding = ItemAudioListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    return AudioViewHolder(binding, onAudioClickListener, onAudioLikeClickListener)
+    return AudioViewHolder(binding, onAudioClickListener, onAudioLikeClickListener, onAudioProfileClick)
   }
 
   override fun onBindViewHolder(holder: AudioViewHolder, position: Int) {
@@ -37,13 +38,20 @@ class AudioListAdapter(
     private val binding: ItemAudioListBinding,
     private val onAudioClickListener: (AudioModel) -> Unit,
     private val onAudioLikeClickListener: (AudioModel) -> Unit,
-  ) : RecyclerView.ViewHolder(binding.root) {
+    private val onAudioProfileClick: (AudioModel) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(model: AudioModel) {
       binding.root.setOnClickListener {
         onAudioClickListener(model)
       }
       binding.apply {
         accountName.text = model.author
+        accountName.setOnClickListener {
+          onAudioProfileClick(model)
+        }
+        userAvatar.setOnClickListener {
+          onAudioProfileClick(model)
+        }
         title.text = model.title
         subtitle.text = model.subtitle
         likeImage.setOnClickListener {

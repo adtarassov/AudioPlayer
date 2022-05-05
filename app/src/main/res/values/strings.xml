@@ -10,5 +10,6 @@
   <string name="menu_create">Create</string>
   <string name="menu_profile">Profile</string>
   <string name="authorize">Авторизация</string>
-  <string name="create_fragment_lable">Create</string>
+  <string name="create_fragment_label">Create</string>
+  <string name="holder_fragment_label">Профиль пользователя</string>
 </resources>

@@ -18,4 +18,8 @@ sealed interface AudioListEvent {
   data class OnAudioLikeClick(
     val model: AudioModel,
   ) : AudioListEvent
+
+  data class OnAudioProfileClick(
+    val model: AudioModel,
+  ) : AudioListEvent
 }

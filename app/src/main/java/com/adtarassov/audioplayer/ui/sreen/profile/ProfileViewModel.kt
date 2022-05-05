@@ -9,6 +9,7 @@ import com.adtarassov.audioplayer.ui.sreen.profile.ProfileEvent.OnExitButtonClic
 import com.adtarassov.audioplayer.ui.sreen.profile.ProfileViewState.Loaded
 import com.adtarassov.audioplayer.ui.sreen.profile.ProfileViewState.Loading
 import com.adtarassov.audioplayer.ui.sreen.profile.ProfileViewState.Unauthorized
+import com.adtarassov.audioplayer.utils.ProfilePageType.MAIN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -20,7 +21,7 @@ class ProfileViewModel @Inject constructor(
   private val preferences: SharedPreferences,
 ) : BaseFlowViewModel<ProfileViewState, ProfileAction, ProfileEvent>() {
 
-  init {
+  private fun observeMainProfilePage() {
     viewModelScope.launch {
       preferences.userAuthModelFlow.collect { userAuthModel ->
         if (userAuthModel.token == null || userAuthModel.accountName == null) {
@@ -29,6 +30,12 @@ class ProfileViewModel @Inject constructor(
           getUserData(userAuthModel.accountName)
         }
       }
+    }
+  }
+
+  private fun getOtherProfile(accountName: String) {
+    viewModelScope.launch {
+      getUserData(accountName)
     }
   }
 
@@ -43,6 +50,13 @@ class ProfileViewModel @Inject constructor(
       is OnExitButtonClicked -> {
         preferences.setToken(null)
         preferences.setAccountName(null)
+      }
+      is ProfileEvent.ViewCreate -> {
+        if (viewEvent.profilePageType == MAIN) {
+          observeMainProfilePage()
+        } else {
+          getOtherProfile(viewEvent.accountName)
+        }
       }
     }
   }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adtarassov.audioplayer.databinding.FragmentAudioListBinding
@@ -15,9 +16,10 @@ import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAction.Empty
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoadFailure
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.AudioLoaded
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListViewState.Loading
-import com.adtarassov.audioplayer.ui.sreen.profile.ProfileFragmentDirections
 import com.adtarassov.audioplayer.utils.AudioListType
+import com.adtarassov.audioplayer.utils.AudioListType.PROFILE
 import com.adtarassov.audioplayer.utils.ProfilePageType
+import com.adtarassov.audioplayer.utils.ProfilePageType.OTHER
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
@@ -28,12 +30,15 @@ class AudioListFragment : Fragment() {
   private val viewModel: AudioListViewModel by viewModels()
   private val adapter = AudioListAdapter(
     { viewModel.obtainEvent(AudioListEvent.OnAudioClick(it)) },
-    { viewModel.obtainEvent(AudioListEvent.OnAudioLikeClick(it)) }
+    { viewModel.obtainEvent(AudioListEvent.OnAudioLikeClick(it)) },
+    { viewModel.obtainEvent(AudioListEvent.OnAudioProfileClick(it)) }
   )
 
   private lateinit var audioListType: AudioListType
   private lateinit var profilePageType: ProfilePageType
   private lateinit var accountName: String
+  private lateinit var novController: NavController
+  private var canNavigate = false
 
   private var _binding: FragmentAudioListBinding? = null
   private val binding get() = _binding!!
@@ -55,13 +60,14 @@ class AudioListFragment : Fragment() {
     binding.audioListRecyclerView.adapter = adapter
     binding.audioListRecyclerView.layoutManager = LinearLayoutManager(context)
     binding.audioListRecyclerView.addItemDecoration(MarginItemDecoration(12))
+    viewModel.obtainEvent(AudioListEvent.ShowAudioList(audioListType, accountName))
+    novController = findNavController()
     lifecycleScope.launchWhenCreated {
       viewModel.viewStates().filterNotNull().collect { state -> bindViewState(state) }
     }
     lifecycleScope.launchWhenCreated {
       viewModel.viewActions().filterNotNull().collect { action -> bindViewAction(action) }
     }
-    viewModel.obtainEvent(AudioListEvent.ShowAudioList(audioListType, accountName))
   }
 
   private fun bindViewState(state: AudioListViewState) {
@@ -77,6 +83,7 @@ class AudioListFragment : Fragment() {
         binding.audioListRecyclerView.isVisible = true
         binding.errorTv.isVisible = false
         adapter.refreshAudioList(state.list)
+        canNavigate = true
       }
       is Loading -> {
         binding.audioListRecyclerView.isVisible = false
@@ -89,8 +96,18 @@ class AudioListFragment : Fragment() {
   private fun bindViewAction(action: AudioListAction) {
     when (action) {
       is AudioListAction.ProfileNavigate -> {
-        val navAction = AudioListFragmentDirections.actionAudioListFragmentToProfileFragment()
-        findNavController().navigate(navAction)
+        if (audioListType == PROFILE || !canNavigate) {
+          return
+        }
+        canNavigate = false
+        val author = action.audioModel.author
+        val navAction = AudioListFragmentDirections.actionAudioListFragmentToFragmentHolder(
+          profileType = OTHER.id,
+          audioListType = PROFILE.id,
+          userAccountNameKey = author
+        )
+        navAction.arguments
+        novController.navigate(navAction)
       }
       is Empty -> {
 

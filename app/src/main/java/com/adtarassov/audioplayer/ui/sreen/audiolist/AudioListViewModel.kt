@@ -7,6 +7,7 @@ import com.adtarassov.audioplayer.ui.BaseFlowViewModel
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListAction.Empty
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioClick
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioLikeClick
+import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.OnAudioProfileClick
 import com.adtarassov.audioplayer.ui.sreen.audiolist.AudioListEvent.ShowAudioList
 import com.adtarassov.audioplayer.utils.AudioListType.LOCAL
 import com.adtarassov.audioplayer.utils.AudioListType.PROFILE
@@ -32,12 +33,16 @@ class AudioListViewModel @Inject constructor(
     audioManager.audioServiceFlow.value?.playerActionForcePlay(model)
   }
 
-  private fun onAudioLikeClicked(model: AudioModel) {
+  private fun onAudioLikeClick(model: AudioModel) {
     model.isLiked = !model.isLiked
     val currentViewState = viewStates().value
     if (currentViewState is AudioListViewState.AudioLoaded) {
       viewState = AudioListViewState.AudioLoaded(currentViewState.list)
     }
+  }
+
+  private fun onAudioProfileClick(model: AudioModel) {
+    viewAction = AudioListAction.ProfileNavigate(model)
   }
 
   private fun showAudioRecommendationList() {
@@ -75,9 +80,11 @@ class AudioListViewModel @Inject constructor(
           }
         }
       }
-      is OnAudioLikeClick -> onAudioLikeClicked(viewEvent.model)
+      is OnAudioLikeClick -> onAudioLikeClick(viewEvent.model)
+      is OnAudioProfileClick -> onAudioProfileClick(viewEvent.model)
       is OnAudioClick -> onAudioClick(viewEvent.model)
     }
   }
+
 
 }
