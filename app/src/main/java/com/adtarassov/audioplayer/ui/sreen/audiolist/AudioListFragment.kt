@@ -82,20 +82,30 @@ class AudioListFragment : Fragment() {
         binding.audioListRecyclerView.isVisible = false
         binding.progressView.isVisible = true
         binding.errorTv.isVisible = false
+        navigated = false
       }
     }
   }
 
+  private var navigated = false
+
   private fun bindViewAction(action: AudioListAction) {
     when (action) {
       is AudioListAction.ProfileNavigate -> {
-        val navAction = AudioListFragmentDirections.actionAudioListFragmentToProfileFragment()
+        if (navigated)
+          return
+        navigated = true
+        val navAction = AudioListFragmentDirections.actionAudioListFragmentToHolderProfileFragment()
         findNavController().navigate(navAction)
       }
       is Empty -> {
 
       }
     }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
   }
 
 }
