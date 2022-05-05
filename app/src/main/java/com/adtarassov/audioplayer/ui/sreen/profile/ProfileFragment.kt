@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 
 @AndroidEntryPoint
-open class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
   private var _binding: FragmentProfileBinding? = null
   private val binding get() = _binding!!
@@ -86,17 +86,6 @@ open class ProfileFragment : Fragment() {
       )
     }
     binding.audioListFragmentContainer.isVisible = true
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    val prevFragment = parentFragmentManager.findFragmentByTag(USER_AUDIO_LIST_FRAGMENT_TAG)
-    binding.audioListFragmentContainer.isVisible = false
-    prevFragment?.let {
-      parentFragmentManager.commit {
-        remove(it)
-      }
-    }
   }
 
 

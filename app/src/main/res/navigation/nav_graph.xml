@@ -17,9 +17,6 @@
     <action
         android:id="@+id/action_audio_list_fragment_to_profile_fragment"
         app:destination="@id/profile_fragment" />
-    <action
-        android:id="@+id/action_audio_list_fragment_to_holder_profile_fragment"
-        app:destination="@id/holder_profile_fragment" />
   </fragment>
 
   <fragment
@@ -48,12 +45,6 @@
       android:name="com.adtarassov.audioplayer.ui.sreen.voice.VoiceFragment"
       android:label="@string/create_fragment_lable"
       tools:layout="@layout/fragment_voice" />
-
-  <fragment
-      android:id="@+id/holder_profile_fragment"
-      android:name="com.adtarassov.audioplayer.HolderProfileFragment"
-      android:label="fragment_holder_profile"
-      tools:layout="@layout/fragment_profile" />
 
 
 </navigation>
