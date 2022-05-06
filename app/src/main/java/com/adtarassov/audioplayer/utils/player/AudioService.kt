@@ -67,7 +67,7 @@ class AudioService : LifecycleService() {
   override fun onCreate() {
     super.onCreate()
     initialisePlayer()
-    initialiseNotification()
+    //initialiseNotification()
   }
 
   override fun onDestroy() {
