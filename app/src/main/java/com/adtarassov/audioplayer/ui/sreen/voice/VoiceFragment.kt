@@ -136,14 +136,14 @@ class VoiceFragment : Fragment() {
         binding.recordButton.pauseAnimation()
         binding.actionButton.setInvisible()
         binding.actionSecondaryButton.isVisible = false
-        enableButtonsEditting(true)
+        enableButtonsEditing(true)
       }
       is VoiceViewState.RECORD -> {
         canMakeRecord = true
         binding.recordButton.playAnimation()
         binding.actionButton.setInvisible()
         binding.actionSecondaryButton.isVisible = false
-        enableButtonsEditting(false)
+        enableButtonsEditing(false)
       }
       is VoiceViewState.RECORDING_FINISH -> {
         canMakeRecord = true
@@ -156,7 +156,7 @@ class VoiceFragment : Fragment() {
         binding.actionButton.setOnClickListener {
           onActionButtonClick()
         }
-        enableButtonsEditting(true)
+        enableButtonsEditing(true)
       }
       is VoiceViewState.PROCESSING -> {
         canMakeRecord = false
@@ -164,7 +164,7 @@ class VoiceFragment : Fragment() {
         binding.actionButton.setVisible()
         binding.actionSecondaryButton.isVisible = false
         binding.actionButton.text = "Отправка"
-        enableButtonsEditting(false)
+        enableButtonsEditing(false)
       }
       is VoiceViewState.UPLOADED -> {
         canMakeRecord = false
@@ -175,7 +175,7 @@ class VoiceFragment : Fragment() {
         binding.actionButton.setOnClickListener {
           viewModel.obtainEvent(VoiceEvent.RefreshRecording)
         }
-        enableButtonsEditting(false)
+        enableButtonsEditing(false)
       }
     }
   }
@@ -191,7 +191,7 @@ class VoiceFragment : Fragment() {
     viewModel.obtainEvent(VoiceEvent.RefreshRecording)
   }
 
-  private fun enableButtonsEditting(enable: Boolean) {
+  private fun enableButtonsEditing(enable: Boolean) {
     binding.recordName.isEnabled = enable
     binding.recordDescription.isEnabled = enable
   }
