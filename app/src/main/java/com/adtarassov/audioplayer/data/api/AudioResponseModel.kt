@@ -5,14 +5,24 @@ import com.google.gson.annotations.SerializedName
 data class AudioResponseModel(
   @SerializedName("account_name")
   val accountName: String,
+
   @SerializedName("id")
   val audioId: Long,
+
   @SerializedName("description")
   val description: String?,
+
   @SerializedName("name")
   val name: String,
+
   @SerializedName("file")
   val audioUrl: String,
+
+  @SerializedName("is_licked")
+  val isLicked: Boolean,
+
+  @SerializedName("duration_ms")
+  val duration: Long,
 )
 
 

@@ -30,9 +30,9 @@ class AudioRepository @Inject constructor(
         author = it.accountName,
         title = it.name,
         subtitle = it.description,
-        durationMs = 10000,
+        durationMs = it.duration,
         filePath = it.audioUrl,
-        isLiked = false
+        isLiked = it.isLicked
       )
     }
   }
