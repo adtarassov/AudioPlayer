@@ -7,6 +7,7 @@ import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
@@ -40,6 +41,28 @@ interface AudioBackendApi {
 
   @GET("api/audio/recommendation")
   suspend fun getAudioRecommendation(): Response<List<AudioResponseModel>>
+
+  @Headers("Accept: application/json")
+  @FormUrlEncoded
+  @POST("api/likes/")
+  suspend fun postLikeForAudio(
+    @Header("Authorization")
+    token: String,
+
+    @Field("audio_id")
+    audioId: String
+  ): Response<Any>
+
+  @Headers("Accept: application/json")
+  @FormUrlEncoded
+  @HTTP(method = "DELETE", path = "api/likes/", hasBody = true)
+  suspend fun deleteLikeForAudio(
+    @Header("Authorization")
+    token: String,
+
+    @Field("audio_id")
+    audioId: String
+  ): Response<Any>
 
   @GET("api/{account_name}/audio")
   suspend fun getAudioProfile(

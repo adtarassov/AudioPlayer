@@ -1,6 +1,7 @@
 package com.adtarassov.audioplayer.data
 
 data class AudioModel(
+  val audioId: Long,
   val author: String,
   val title: String,
   val subtitle: String?,

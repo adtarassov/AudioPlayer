@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import okhttp3.MultipartBody.Part
 import okhttp3.RequestBody
+import retrofit2.Response
 import retrofit2.http.Field
 import java.io.File
 import javax.inject.Inject
@@ -27,6 +28,7 @@ class AudioRepository @Inject constructor(
     val audioResponseModelList = response.body() ?: emptyList()
     return audioResponseModelList.map {
       AudioModel(
+        audioId = it.audioId,
         author = it.accountName,
         title = it.name,
         subtitle = it.description,
@@ -44,10 +46,13 @@ class AudioRepository @Inject constructor(
     file: Part?,
   ) = audioBackendApi.uploadAudioFile(token, audioName, audioDescription, file)
 
-  suspend fun setLikeAudio(audioModel: AudioModel): Boolean {
-    delay(1000)
-    val result = true
-    return result
+  suspend fun setLikeAudio(token: String, audioModel: AudioModel): Response<Any> {
+    val audioId = audioModel.audioId
+    return if (audioModel.isLiked) {
+      audioBackendApi.postLikeForAudio(token, audioId.toString())
+    } else {
+      audioBackendApi.deleteLikeForAudio(token, audioId.toString())
+    }
   }
 
   suspend fun getAudioProfileList(accountName: String): List<AudioModel> {
@@ -55,12 +60,13 @@ class AudioRepository @Inject constructor(
     val audioResponseModelList = response.body() ?: emptyList()
     return audioResponseModelList.map {
       AudioModel(
+        audioId = it.audioId,
         author = it.accountName,
         title = it.name,
         subtitle = it.description,
-        durationMs = 10000,
+        durationMs = it.duration,
         filePath = it.audioUrl,
-        isLiked = false
+        isLiked = it.isLicked
       )
     }
   }
@@ -83,6 +89,7 @@ class AudioRepository @Inject constructor(
         } else {
           audioList.add(
             AudioModel(
+              audioId = 0,
               author = artist,
               title = title,
               subtitle = null,
@@ -108,6 +115,7 @@ class AudioRepository @Inject constructor(
         Log.e(AudioRepository::class.java.simpleName, "title-$title or duration-$duration is null")
       } else {
         return AudioModel(
+          audioId = 0,
           author = author,
           title = title,
           subtitle = subtitle,
